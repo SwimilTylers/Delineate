@@ -6,8 +6,9 @@
 using namespace std;
 
 
-GLPlayer::GLPlayer()
+GLPlayer::GLPlayer(Window& InitWindow)
 {
+	WindowNow = InitWindow;
 }
 
 void GLPlayer::DrawOutline(Outline& outline)
@@ -15,7 +16,8 @@ void GLPlayer::DrawOutline(Outline& outline)
 	glBegin(GL_POINTS);
 	for (const pair<int,int> element : outline.Vertices(WindowNow))
 	{
-		glVertex2d(element.first, element.second);
+		glVertex3f(float(element.first) / WindowNow.getWindowSize().first - 1,
+			float(element.second) / WindowNow.getWindowSize().second - 1, 0.0);
 	}
 	glEnd();
 }
@@ -27,7 +29,8 @@ void GLPlayer::FillGraphic(Graphic& graphic) const
 	glBegin(GL_POINTS);
 	for (const pair<int, int> element : graphic.Vertices(WindowNow))
 	{
-		glVertex2d(element.first, element.second);
+		glVertex3f(float(element.first) / WindowNow.getWindowSize().first - 1, 
+			float(element.second) / WindowNow.getWindowSize().second - 1, 0.0);
 	}
 	glEnd();
 }

@@ -6,7 +6,7 @@ class Outline;
 class GLPlayer
 {
 public:
-	GLPlayer();
+	GLPlayer(Window& InitWindow);
 	void DrawOutline(Outline &outline);
 	void FillGraphic(Graphic &graphic) const;
 	Window& getWindow();
