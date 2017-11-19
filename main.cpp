@@ -3,6 +3,11 @@
 #include "GLPlayer.h"
 #include "GeometricLine.h"
 #include "StraightLine.h"
+#include "GeometricCircle.h"
+#include "CircleRim.h"
+#include "GeometricEllipse.h"
+#include "EllipseRim.h"
+
 using namespace std;
 
 #define DEBUG 1
@@ -14,15 +19,21 @@ using namespace std;
 	glColor3f(0.0, 0.0, 0.0);
 	static Window window(pair<int, int>(1000, 800));
 	static GLPlayer Player(window);
-	static GeometricLine geometric_line(pair<int, int>(0, 800), pair<int, int>(0, 0));
-	static GeometricLine geometric_line_2(pair<int, int>(0, 0), pair<int, int>(200, 300));
-	static GeometricLine geometric_line_3(pair<int, int>(0, 0), pair<int, int>(1000, 0));
+	static GeometricLine geometric_line(pair<int, int>(100, 800), pair<int, int>(1900, 400));
+	static GeometricLine geometric_line_2(pair<int, int>(200, 300), pair<int, int>(1200, 1300));
+	static GeometricLine geometric_line_3(pair<int, int>(100, 1000), pair<int, int>(1000, 100));
+	static GeometricCircle geometric_circle(pair<int, int>(1000, 800), 400);
+	static GeometricEllipse geometric_ellipse(pair<int, int>(800, 1000), 500, 300);
 	static StraightLine line(geometric_line);
 	static StraightLine line_2(geometric_line_2);
 	static StraightLine line_3(geometric_line_3);
+	static CircleRim circle_rim(geometric_circle);
+	static EllipseRim ellipse_rim(geometric_ellipse);
 	Player.DrawOutline(line);
 	Player.DrawOutline(line_2);
 	Player.DrawOutline(line_3);
+	Player.DrawOutline(circle_rim);
+	Player.DrawOutline(ellipse_rim);
 	glFlush();
 }
 #elif TEST_ONE

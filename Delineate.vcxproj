@@ -139,6 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CircleRim.h" />
+    <ClInclude Include="EllipseRim.h" />
+    <ClInclude Include="GeometricCircle.h" />
+    <ClInclude Include="GeometricEllipse.h" />
     <ClInclude Include="GeometricLine.h" />
     <ClInclude Include="GLPlayer.h" />
     <ClInclude Include="Graphic.h" />
@@ -147,6 +151,10 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CircleRim.cpp" />
+    <ClCompile Include="EllipseRim.cpp" />
+    <ClCompile Include="GeometricCircle.cpp" />
+    <ClCompile Include="GeometricEllipse.cpp" />
     <ClCompile Include="GeometricLine.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="Graphic.cpp" />

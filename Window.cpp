@@ -5,7 +5,7 @@ Window::Window()
 {
 }
 
-Window::Window(std::pair<int, int> size)
+Window::Window(const std::pair<int, int> size)
 {
 	WindowSize = size;
 }

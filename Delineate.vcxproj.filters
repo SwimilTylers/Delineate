@@ -33,6 +33,18 @@
     <ClInclude Include="GeometricLine.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="GeometricCircle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleRim.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseRim.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometricEllipse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLPlayer.cpp">
@@ -54,6 +66,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometricCircle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleRim.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseRim.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometricEllipse.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
