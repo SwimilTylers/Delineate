@@ -13,7 +13,7 @@ public:
 	std::vector<std::pair<int, int>> Vertices(Window& window_now) override;
 
 private:
-	GeometricLine& orignal;
+	GeometricLine orignal;
 
 	// Pre
 	static void inline Exchange_Tensor(std::pair<int, int>& needle)

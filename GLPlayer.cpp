@@ -5,6 +5,7 @@
 #include "Graphic.h"
 using namespace std;
 
+#define FLOAT_PRINT true
 
 GLPlayer::GLPlayer(Window& InitWindow)
 {
@@ -16,8 +17,13 @@ void GLPlayer::DrawOutline(Outline& outline)
 	glBegin(GL_POINTS);
 	for (const pair<int,int> element : outline.Vertices(WindowNow))
 	{
-		glVertex3f(float(element.first) / WindowNow.getWindowSize().first - 1,
+#if FLOAT_PRINT
+  		glVertex3f(float(element.first) / WindowNow.getWindowSize().first - 1,
 			float(element.second) / WindowNow.getWindowSize().second - 1, 0.0);
+#else
+		glVertex3d(element.first, element.second, 0);
+#endif
+
 	}
 	glEnd();
 }
@@ -29,8 +35,13 @@ void GLPlayer::FillGraphic(Graphic& graphic) const
 	glBegin(GL_POINTS);
 	for (const pair<int, int> element : graphic.Vertices(WindowNow))
 	{
-		glVertex3f(float(element.first) / WindowNow.getWindowSize().first - 1, 
+#if FLOAT_PRINT
+  		glVertex3f(float(element.first) / WindowNow.getWindowSize().first - 1, 
 			float(element.second) / WindowNow.getWindowSize().second - 1, 0.0);
+#else
+		glVertex3d(element.first, element.second, 0);
+#endif
+
 	}
 	glEnd();
 }

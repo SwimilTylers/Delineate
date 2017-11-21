@@ -7,17 +7,21 @@
 #include "CircleRim.h"
 #include "GeometricEllipse.h"
 #include "EllipseRim.h"
+#include "RectangleRim.h"
 
 using namespace std;
 
-#define DEBUG 1
+#define DEBUG true
+
+static int PAGE_HEIGHT = 800;
+static int PAGE_WIDTH = 1000;
 
 #if DEBUG
   void Display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.0, 0.0, 0.0);
-	static Window window(pair<int, int>(1000, 800));
+	static Window window(pair<int, int>(PAGE_WIDTH, PAGE_HEIGHT));
 	static GLPlayer Player(window);
 	static GeometricLine geometric_line(pair<int, int>(100, 800), pair<int, int>(1900, 400));
 	static GeometricLine geometric_line_2(pair<int, int>(200, 300), pair<int, int>(1200, 1300));
@@ -29,11 +33,13 @@ using namespace std;
 	static StraightLine line_3(geometric_line_3);
 	static CircleRim circle_rim(geometric_circle);
 	static EllipseRim ellipse_rim(geometric_ellipse);
+	static RectangleRim rectangle_rim(pair<int, int>(100, 400), pair<int, int>(1800, 1400));
 	Player.DrawOutline(line);
 	Player.DrawOutline(line_2);
 	Player.DrawOutline(line_3);
 	Player.DrawOutline(circle_rim);
 	Player.DrawOutline(ellipse_rim);
+	Player.DrawOutline(rectangle_rim);
 	glFlush();
 }
 #elif TEST_ONE
@@ -87,10 +93,9 @@ void Display()
 
 int main(int argc, char** argv)
 {
-	glutInit(&argc, argv);
 	glutInit(&argc, argv);                           //初始化GLUT并处理命令行参数  
 	glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);      //指定模式：单缓存OR双缓存；RGBA模式OR颜色索引模式  
-	glutInitWindowSize(1000, 800);                    //指定窗口大小（像素）  
+	glutInitWindowSize(PAGE_WIDTH, PAGE_HEIGHT);                    //指定窗口大小（像素）  
 	glutInitWindowPosition(0, 0);                //指定窗口左上角在屏幕上的位置  
 	glutCreateWindow("Delineate");                      //使用OpenGL场景创建一个窗口，参数为窗口名称  
 	glClearColor(1.0, 1.0, 1.0, 1.0);
