@@ -4,7 +4,7 @@
 
 PolygonRim::PolygonRim(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> vertex_pairs)
 {
-	for (const std::pair<std::pair<int, int>, std::pair<int, int>> element : vertex_pairs)
+	for (const auto element : vertex_pairs)
 	{
 		GeometricLine dscp(element.first, element.second);
 		const StraightLine new_edge(dscp);
@@ -29,7 +29,7 @@ std::vector<std::pair<int, int>> PolygonRim::Vertices(Window& window_now)
 	else
 	{
 		Trajectory.clear();
-		const std::vector<StraightLine> compatible_outlines = compatibility(window_now);
+		const auto compatible_outlines = compatibility(window_now);
 		for (auto element : compatible_outlines)
 		{
 			auto buf = element.Vertices(window_now);
@@ -38,6 +38,12 @@ std::vector<std::pair<int, int>> PolygonRim::Vertices(Window& window_now)
 		isComplete = true;
 		return Trajectory;
 	}
+}
+
+std::vector<Outline> PolygonRim::getEdge() const
+{
+	auto ret = edges;
+	return ret;
 }
 
 std::vector<StraightLine>& PolygonRim::compatibility(Window& window)

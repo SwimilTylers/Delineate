@@ -11,6 +11,10 @@ public:
 	StraightLine(GeometricLine& description);
 	~StraightLine();
 	std::vector<std::pair<int, int>> Vertices(Window& window_now) override;
+	std::pair<int,GeometricLine::ScanBucket> get_scan_bucket_info()
+	{
+		return std::pair<int, GeometricLine::ScanBucket>(orignal.scan_bucket_start_y(), orignal.scan_bucket());
+	}
 
 private:
 	GeometricLine orignal;

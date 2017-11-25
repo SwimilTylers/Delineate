@@ -9,6 +9,7 @@ public:
 	explicit PolygonRim(std::vector<std::pair<std::pair<int,int>,std::pair<int,int>>> vertex_pairs);
 	virtual ~PolygonRim();
 	std::vector<std::pair<int, int>> Vertices(Window& window_now) override;
+	std::vector<Outline> getEdge() const;
 
 protected:
 	std::vector<StraightLine> edges;

@@ -147,6 +147,7 @@
     <ClInclude Include="GLPlayer.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="Outline.h" />
+    <ClInclude Include="Polygon.h" />
     <ClInclude Include="PolygonRim.h" />
     <ClInclude Include="RectangleRim.h" />
     <ClInclude Include="StraightLine.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="MouseAcvtiveMove.cpp" />
     <ClCompile Include="MouseClick.cpp" />
     <ClCompile Include="Outline.cpp" />
+    <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="PolygonRim.cpp" />
     <ClCompile Include="RectangleRim.cpp" />
     <ClCompile Include="StraightLine.cpp" />

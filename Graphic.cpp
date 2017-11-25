@@ -2,8 +2,10 @@
 
 
 
-Graphic::Graphic()
+Graphic::Graphic(const std::vector<Outline> profile, const float Red, const float Green, const float Blue)
 {
+	outlines_surround = profile;
+	setColor(Red, Green, Blue);
 }
 
 
