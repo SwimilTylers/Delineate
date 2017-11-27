@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CGeneratorBarrier.h" />
     <ClInclude Include="CircleRim.h" />
     <ClInclude Include="EllipseRim.h" />
     <ClInclude Include="GeometricCircle.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CGeneratorBarrier.cpp" />
     <ClCompile Include="CircleRim.cpp" />
     <ClCompile Include="EllipseRim.cpp" />
     <ClCompile Include="GeometricCircle.cpp" />

@@ -13,80 +13,77 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\MetaGeometry">
+      <UniqueIdentifier>{9d2d24c3-b8a8-40ca-8020-198a4ac632d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\MetaGeometry">
+      <UniqueIdentifier>{deba59a1-843d-49ca-b31d-2548e2bc1807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\SolidDescriptives">
+      <UniqueIdentifier>{154e437c-3647-44db-b4c5-7c089552ac46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\SolidDescriptives">
+      <UniqueIdentifier>{ed546332-6267-4283-b3c2-1d3ceb3ce245}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\HollowPerimeter">
+      <UniqueIdentifier>{a719a85f-461f-4849-8cd6-24e6dcad3661}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\HollowPerimeter">
+      <UniqueIdentifier>{c1a9568a-aa5e-4161-9846-9a58f4b591e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLPlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Outline.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphic.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GeometricLine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GeometricCircle.h">
+    <ClInclude Include="CGeneratorBarrier.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CircleRim.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\HollowPerimeter</Filter>
     </ClInclude>
     <ClInclude Include="EllipseRim.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\HollowPerimeter</Filter>
     </ClInclude>
-    <ClInclude Include="GeometricEllipse.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="StraightLine.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="Outline.h">
+      <Filter>头文件\HollowPerimeter</Filter>
     </ClInclude>
     <ClInclude Include="PolygonRim.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\HollowPerimeter</Filter>
     </ClInclude>
     <ClInclude Include="RectangleRim.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\HollowPerimeter</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometricEllipse.h">
+      <Filter>头文件\MetaGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometricCircle.h">
+      <Filter>头文件\MetaGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometricLine.h">
+      <Filter>头文件\MetaGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="StraightLine.h">
+      <Filter>头文件\HollowPerimeter</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic.h">
+      <Filter>头文件\SolidDescriptives</Filter>
     </ClInclude>
     <ClInclude Include="Polygon.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\SolidDescriptives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Outline.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphic.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="StraightLine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometricLine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometricCircle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CircleRim.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="EllipseRim.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometricEllipse.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MouseAcvtiveMove.cpp">
@@ -95,14 +92,41 @@
     <ClCompile Include="MouseClick.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="PolygonRim.cpp">
+    <ClCompile Include="CGeneratorBarrier.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleRim.cpp">
+      <Filter>源文件\HollowPerimeter</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseRim.cpp">
+      <Filter>源文件\HollowPerimeter</Filter>
+    </ClCompile>
+    <ClCompile Include="Outline.cpp">
+      <Filter>源文件\HollowPerimeter</Filter>
     </ClCompile>
     <ClCompile Include="RectangleRim.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\HollowPerimeter</Filter>
+    </ClCompile>
+    <ClCompile Include="PolygonRim.cpp">
+      <Filter>源文件\HollowPerimeter</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometricCircle.cpp">
+      <Filter>源文件\MetaGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometricEllipse.cpp">
+      <Filter>源文件\MetaGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometricLine.cpp">
+      <Filter>源文件\MetaGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="StraightLine.cpp">
+      <Filter>源文件\HollowPerimeter</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic.cpp">
+      <Filter>源文件\SolidDescriptives</Filter>
     </ClCompile>
     <ClCompile Include="Polygon.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\SolidDescriptives</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

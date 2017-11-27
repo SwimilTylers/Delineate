@@ -2,6 +2,7 @@
 #include <utility>
 #include "Window.h"
 #include <vector>
+#include "CGeneratorBarrier.h"
 
 class GeometricLine
 {
@@ -14,14 +15,14 @@ public:
 	std::pair<std::pair<int, int>, std::pair<int, int>> get_vertices();
 	GeometricLine *compatibility(Window& window);
 
-	class ScanBucket
+	class ScanBucket : public CGeneratorBarrier
 	{
 	public:
 		ScanBucket(const int x, const int max_y, const double gradient)
-			: x(x),
-			  max_y(max_y),
+			: max_y(max_y),
 			  gradient(gradient)
 		{
+			this->x = x;
 		}
 
 		ScanBucket* updata(const int current_y) const
@@ -33,13 +34,12 @@ public:
 				return new ScanBucket(x + 1 / gradient, max_y, gradient);
 		}
 
-		int get_x() const
+		int get_max_y() const
 		{
-			return x;
+			return max_y;
 		}
 
 	private:
-		int x;
 		int max_y;
 		double gradient;
 		bool isOutofDate(const int cmp_y) const
@@ -49,15 +49,25 @@ public:
 			else
 				return false;
 		}
+
+	public:
+		~ScanBucket() override
+		{
+		}
+
+		CGeneratorBarrier* Update(const int now_y) override
+		{
+			return updata(now_y);
+		}
 	};
 
-	ScanBucket scan_bucket()
+	ScanBucket scan_bucket() const
 	{
 		const auto yleast = start.second < end.second ? start : end;
 		const auto ymost = start.second > end.second ? start : end;
 		return ScanBucket(ymost.first, yleast.second, gradient);
 	}
-	int scan_bucket_start_y()
+	int scan_bucket_start_y() const
 	{
 		return start.second < end.second ? start.second : end.second;
 	}
