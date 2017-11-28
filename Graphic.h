@@ -29,6 +29,8 @@ public:
 		return uttermost;
 	}
 
+	virtual std::pair<int, int>& getRangeY() = 0;
+
 protected:
 	
 	RectangleRim uttermost;

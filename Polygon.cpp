@@ -2,16 +2,17 @@
 #include <valarray>
 
 
-Polygon::Polygon(RectangleRim& uttermost, PolygonRim& profile, std::vector<float>& RimColor,
+Polygon::Polygon(PolygonRim& profile, std::vector<float>& RimColor,
 	std::vector<std::pair<std::pair<int, int>, std::vector<float>>>& CGenerators)
-	: Graphic(uttermost, new PolygonRim(profile), RimColor, CGenerators), profile(profile)
+	: Graphic(sketchout(profile), new PolygonRim(profile), RimColor, CGenerators)
+	, profile(profile), oel_server(profile.DeployOEL())
 {
 }
 
 void Polygon::generateCGProfile()
 {
-	auto OEL = profile.get_ordered_edge_list();
-	const auto least_y = profile.getRangeY().first;
+	auto OEL = oel_server.get_ordered_edge_list();
+	const auto least_y = oel_server.getRangeY().first;
 
 	for (auto element : OEL)
 	{
@@ -36,6 +37,21 @@ void Polygon::generateCGProfile()
 		}
 		this_y++;
 	}
+}
+
+RectangleRim& Polygon::sketchout(PolygonRim& profile)
+{
+	auto vertices = profile.getApexes();
+	std::pair<int, int> max, min;
+	std::for_each(vertices.begin(), vertices.end(), [&max, &min](std::pair<int,int> element)
+	{
+		max.first = max.first > element.first ? max.first : element.first;
+		max.second = max.second > element.second ? max.second : element.second;
+
+		min.first = min.first < element.first ? min.first : element.first;
+		min.first = min.second < element.second ? min.second : element.second;
+	});
+	return *(new RectangleRim(min, max));
 }
 
 Polygon::~Polygon()

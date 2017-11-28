@@ -12,7 +12,7 @@ GLPlayer::GLPlayer(Window& InitWindow)
 	WindowNow = InitWindow;
 }
 
-void GLPlayer::DrawOutline(Outline& outline)
+void GLPlayer::DrawOutline(Outline& outline) const
 {
 	glBegin(GL_POINTS);
 	for (const pair<int,int> element : outline.Vertices(WindowNow))
@@ -33,7 +33,7 @@ void GLPlayer::FillGraphic(Graphic& graphic) const
 	float* color = graphic.getColor();
 	glColor3f(color[0], color[1], color[2]);
 	glBegin(GL_POINTS);
-	for (const pair<int, int> element : graphic.Vertices(WindowNow))
+	for (const pair<int, int> element : graphic.EdgeVertices(WindowNow))
 	{
 #if FLOAT_PRINT
   		glVertex3f(float(element.first) / WindowNow.getWindowSize().first - 1, 

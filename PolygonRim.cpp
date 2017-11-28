@@ -4,8 +4,6 @@
 
 PolygonRim::PolygonRim(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> vertex_pairs)
 {
-	std::vector<std::pair<int,GeometricLine::ScanBucket>> sbbuf;
-	std::vector<double> gradients;
 	for (const auto element : vertex_pairs)
 	{
 		GeometricLine dscp(element.first, element.second);
@@ -14,13 +12,11 @@ PolygonRim::PolygonRim(std::vector<std::pair<std::pair<int, int>, std::pair<int,
 		vertices.push_back(element.first);
 		vertices.push_back(element.second);
 
-		sbbuf.push_back(new_edge.getScanBucket());
-		gradients.push_back(new_edge.getGradient());
+		OELBackups.ScanBacketStack.push_back(new_edge.getScanBucket());
+		OELBackups.CorrespondingGradients.push_back(new_edge.getGradient());
 	}
 	std::sort(vertices.begin(), vertices.end());
 	vertices.erase(std::unique(vertices.begin(), vertices.end()), vertices.end());
-
-	RegularizeOEL(gradients, sbbuf);
 }
 
 PolygonRim::~PolygonRim()
@@ -63,15 +59,10 @@ bool PolygonRim::not_collide(Window& window)
 	return true;
 }
 
-std::vector<std::vector<GeometricLine::ScanBucket>>& PolygonRim::get_ordered_edge_list()
-{
-	return ordered_edge_list;
-}
-
-void PolygonRim::RegularizeOEL(std::vector<double>& gradients, std::vector<std::pair<int, GeometricLine::ScanBucket>>& sbbuf)
+PolygonRim::OELServer::OELServer(const std::vector<double>& gradients, const std::vector<std::pair<int, GeometricLine::ScanBucket>>& sbbuf)
 {
 	int min_y(0x7FFFFFFF), max_y(0);
-	std::for_each(sbbuf.begin(),sbbuf.end(), [&min_y, &max_y](std::pair<int,GeometricLine::ScanBucket>& x)
+	std::for_each(sbbuf.begin(), sbbuf.end(), [&min_y, &max_y](std::pair<int, GeometricLine::ScanBucket>& x)
 	{
 		min_y = x.first < min_y ? x.first : min_y;
 		max_y = x.second.get_max_y() > max_y ? x.second.get_max_y() : max_y;
@@ -86,7 +77,7 @@ void PolygonRim::RegularizeOEL(std::vector<double>& gradients, std::vector<std::
 		if (!((gradients[i - 1] * gradients[i]) > 0))
 		{
 			const auto bufptr = buf.updata(rela_y + 1);
-			if(bufptr != nullptr)
+			if (bufptr != nullptr)
 			{
 				ordered_edge_list[rela_y + 1].push_back(*bufptr);
 			}
@@ -96,8 +87,17 @@ void PolygonRim::RegularizeOEL(std::vector<double>& gradients, std::vector<std::
 			ordered_edge_list[rela_y].push_back(buf);
 		}
 	}
-	std::for_each(ordered_edge_list.begin(), ordered_edge_list.end(), 
+	std::for_each(ordered_edge_list.begin(), ordered_edge_list.end(),
 		[](std::vector<GeometricLine::ScanBucket> &element) {std::sort(element.begin(), element.end()); });
 	RangeY.first = min_y;
 	RangeY.second = max_y;
+}
+
+PolygonRim::OELServer::~OELServer()
+{
+}
+
+std::vector<std::vector<GeometricLine::ScanBucket>>& PolygonRim::OELServer::get_ordered_edge_list()
+{
+	return ordered_edge_list;
 }
