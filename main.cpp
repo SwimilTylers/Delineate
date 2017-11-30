@@ -8,6 +8,7 @@
 #include "GeometricEllipse.h"
 #include "EllipseRim.h"
 #include "RectangleRim.h"
+#include "Polygon.h"
 
 using namespace std;
 
@@ -33,13 +34,34 @@ static int PAGE_WIDTH = 1000;
 	static StraightLine line_3(geometric_line_3);
 	static CircleRim circle_rim(geometric_circle);
 	static EllipseRim ellipse_rim(geometric_ellipse);
-	static RectangleRim rectangle_rim(pair<int, int>(100, 400), pair<int, int>(1800, 1400));
+	static RectangleRim rectangle_rim(pair<int, int>(1100, 400), pair<int, int>(1800, 1400));
+	static RectangleRim colorful_rectangle_rim(pair<int, int>(100, 400), pair<int, int>(300, 800));
+	static vector<float> pencolor = vector<float>(3);
+	pencolor[0] = 0.4;
+	pencolor[1] = 0.6;
+  	pencolor[2] = 0.2;
+	static vector<pair<pair<int, int>, vector<float>>> cgenerators;
+	cgenerators.push_back(pair<pair<int, int>, vector<float>>(pair<int, int>(200, 500), pencolor));
+	static Polygon rectangle(colorful_rectangle_rim, pencolor, cgenerators);
+
+	pair<int, int> point_1(500, 700), point_2(600, 800), point_3(800, 500);
+	vector<pair<pair<int, int>, pair<int, int>>> perimeter;
+	perimeter.push_back(pair<pair<int, int>, pair<int, int>>(point_1, point_2));
+	perimeter.push_back(pair<pair<int, int>, pair<int, int>>(point_2, point_3));
+	perimeter.push_back(pair<pair<int, int>, pair<int, int>>(point_3, point_1));
+	static PolygonRim polygon_rim(perimeter);
+	cgenerators.pop_back();
+	cgenerators.push_back(pair<pair<int, int>, vector<float>>(pair<int, int>(600, 700), pencolor));
+	static Polygon polygon(polygon_rim, pencolor, cgenerators);
+
 	Player.DrawOutline(line);
 	Player.DrawOutline(line_2);
 	Player.DrawOutline(line_3);
 	Player.DrawOutline(circle_rim);
 	Player.DrawOutline(ellipse_rim);
 	Player.DrawOutline(rectangle_rim);
+	Player.FillGraphic(rectangle);
+	Player.FillGraphic(polygon);
 	glFlush();
 }
 #elif TEST_ONE

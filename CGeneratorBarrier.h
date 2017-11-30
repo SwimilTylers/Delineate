@@ -10,7 +10,7 @@ public:
 		return x;
 	}
 
-	virtual CGeneratorBarrier* Update(const int now_y) = 0;
+	virtual CGeneratorBarrier* getNextBarrier(const int now_y) const = 0;
 
 protected:
 	int x;

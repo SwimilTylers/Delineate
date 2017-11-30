@@ -1,0 +1,51 @@
+﻿  CGeneratorBarrier.cpp
+  CircleRim.cpp
+  EllipseRim.cpp
+  GeometricCircle.cpp
+  GeometricEllipse.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.11.25503\include\utility(188): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+  GeometricEllipse.cpp(11): note: 参见对正在编译的函数 模板 实例化“std::pair<int,int>::pair<double,const _Ty2&,void,0>(_Other1 &&,_Other2) noexcept”的引用
+          with
+          [
+              _Ty2=int,
+              _Other1=double,
+              _Other2=const int &
+          ]
+  GeometricEllipse.cpp(10): note: 参见对正在编译的函数 模板 实例化“std::pair<int,int>::pair<double,const _Ty2&,void,0>(_Other1 &&,_Other2) noexcept”的引用
+          with
+          [
+              _Ty2=int,
+              _Other1=double,
+              _Other2=const int &
+          ]
+  GeometricLine.cpp
+GeometricLine.cpp(44): warning C4244: “参数”: 从“double”转换到“const int”，可能丢失数据
+  GLPlayer.cpp
+GLPlayer.cpp(32): warning C4018: “>=”: 有符号/无符号不匹配
+GLPlayer.cpp(162): warning C4018: “<”: 有符号/无符号不匹配
+GLPlayer.cpp(217): warning C4018: “<”: 有符号/无符号不匹配
+GLPlayer.cpp(229): warning C4018: “<”: 有符号/无符号不匹配
+GLPlayer.cpp(280): warning C4018: “<”: 有符号/无符号不匹配
+  Graphic.cpp
+  main.cpp
+  MouseAcvtiveMove.cpp
+  MouseClick.cpp
+  Outline.cpp
+  Polygon.cpp
+  PolygonRim.cpp
+PolygonRim.cpp(75): warning C4018: “<”: 有符号/无符号不匹配
+PolygonRim.cpp(86): warning C4018: “<”: 有符号/无符号不匹配
+  RectangleRim.cpp
+  StraightLine.cpp
+  Window.cpp
+  正在生成代码
+  All 1382 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+glut32.lib(glut32.dll) : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+glut32.lib(glut32.dll) : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+glut32.lib(glut32.dll) : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+glut32.lib(glut32.dll) : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+glut32.lib(glut32.dll) : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+glut32.lib(glut32.dll) : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+glut32.lib(glut32.dll) : error LNK2026: 模块对于 SAFESEH 映像是不安全的。
+E:\Computer Graphics\Delineate\Release\Delineate.exe : fatal error LNK1281: 无法生成 SAFESEH 映像。

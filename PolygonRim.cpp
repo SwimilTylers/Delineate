@@ -59,7 +59,7 @@ bool PolygonRim::not_collide(Window& window)
 	return true;
 }
 
-PolygonRim::OELServer::OELServer(const std::vector<double>& gradients, const std::vector<std::pair<int, GeometricLine::ScanBucket>>& sbbuf)
+PolygonRim::OELServer::OELServer(const std::vector<double>& gradients, std::vector<std::pair<int, GeometricLine::ScanBucket>>& sbbuf)
 {
 	int min_y(0x7FFFFFFF), max_y(0);
 	std::for_each(sbbuf.begin(), sbbuf.end(), [&min_y, &max_y](std::pair<int, GeometricLine::ScanBucket>& x)
@@ -70,14 +70,20 @@ PolygonRim::OELServer::OELServer(const std::vector<double>& gradients, const std
 
 	ordered_edge_list.resize(max_y - min_y + 1);
 
-	for (int i = 1; i < ordered_edge_list.size(); ++i)
+	ordered_edge_list[sbbuf[0].first - min_y].push_back(sbbuf[0].second);
+
+	for (int i = 1; i < sbbuf.size(); ++i)
 	{
 		const int rela_y = sbbuf[i].first - min_y;
-		auto buf = sbbuf[i].second;
-		if (!((gradients[i - 1] * gradients[i]) > 0))
+		auto&& buf = sbbuf[i].second;
+		if (gradients[i - 1] == 0)
 		{
-			const auto bufptr = buf.updata(rela_y + 1);
-			if (bufptr != nullptr)
+			ordered_edge_list[rela_y].push_back(buf);
+		}
+		else if (!((gradients[i - 1] * gradients[i]) > 0))
+		{
+			const auto bufptr = buf.updata(rela_y + 1 + min_y);
+			if (bufptr != nullptr && rela_y + 1 < ordered_edge_list.size())
 			{
 				ordered_edge_list[rela_y + 1].push_back(*bufptr);
 			}
@@ -87,8 +93,24 @@ PolygonRim::OELServer::OELServer(const std::vector<double>& gradients, const std
 			ordered_edge_list[rela_y].push_back(buf);
 		}
 	}
+
+	
 	std::for_each(ordered_edge_list.begin(), ordered_edge_list.end(),
-		[](std::vector<GeometricLine::ScanBucket> &element) {std::sort(element.begin(), element.end()); });
+		[](std::vector<GeometricLine::ScanBucket>& element)
+	{
+		std::sort(element.begin(), element.end(),
+			[](GeometricLine::ScanBucket& x, GeometricLine::ScanBucket& y)->bool
+		{
+			return x.get_x() < y.get_x();
+		});
+	});
+	
+/*
+	for (auto& element : ordered_edge_list)
+	{
+		std::sort(element.begin(), element.end());
+	}
+*/
 	RangeY.first = min_y;
 	RangeY.second = max_y;
 }

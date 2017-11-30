@@ -22,6 +22,7 @@ public:
 	}
 	std::vector<std::vector<CGeneratorBarrier*>>& getCGProfile()
 	{
+		generateCGProfile();
 		return CGeneratorProfile;
 	}
 	RectangleRim& getUttermost()

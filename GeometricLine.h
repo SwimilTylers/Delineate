@@ -25,14 +25,7 @@ public:
 			this->x = x;
 		}
 
-		ScanBucket* updata(const int current_y) const
-		{
-			if (isOutofDate(current_y))	return nullptr;
-			if (gradient == NAN || gradient == INFINITY)
-				return new ScanBucket(*this);
-			else
-				return new ScanBucket(x + 1 / gradient, max_y, gradient);
-		}
+		ScanBucket* updata(const int current_y) const;
 
 		int get_max_y() const
 		{
@@ -51,21 +44,14 @@ public:
 		}
 
 	public:
-		~ScanBucket() override
-		{
-		}
-
-		CGeneratorBarrier* Update(const int now_y) override
-		{
-			return updata(now_y);
-		}
+		CGeneratorBarrier* getNextBarrier(const int now_y) const override;
 	};
 
 	ScanBucket scan_bucket() const
 	{
 		const auto yleast = start.second < end.second ? start : end;
 		const auto ymost = start.second > end.second ? start : end;
-		return ScanBucket(ymost.first, yleast.second, gradient);
+		return ScanBucket(yleast.first, ymost.second, gradient);
 	}
 	int scan_bucket_start_y() const
 	{

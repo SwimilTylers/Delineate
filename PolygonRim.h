@@ -22,7 +22,7 @@ public:
 	{
 	public:
 		OELServer(const std::vector<double>& gradients, 
-			const std::vector<std::pair<int, GeometricLine::ScanBucket>>& scanbackets);
+			std::vector<std::pair<int, GeometricLine::ScanBucket>>& scanbackets);
 		~OELServer();
 		std::vector<std::vector<GeometricLine::ScanBucket>>& get_ordered_edge_list();
 		std::pair<int, int>& getRangeY()
@@ -36,9 +36,9 @@ public:
 	};
 
 
-	OELServer& DeployOEL() const
+	OELServer DeployOEL()
 	{
-		return *(new OELServer(OELBackups.CorrespondingGradients, OELBackups.ScanBacketStack));
+		return OELServer(OELBackups.CorrespondingGradients, OELBackups.ScanBacketStack);
 	}
 
 

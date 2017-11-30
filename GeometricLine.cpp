@@ -34,3 +34,17 @@ GeometricLine* GeometricLine::compatibility(Window& window)
 {
 	return new GeometricLine(*this);
 }
+
+GeometricLine::ScanBucket* GeometricLine::ScanBucket::updata(const int current_y) const
+{
+	if (isOutofDate(current_y))	return nullptr;
+	if (gradient == NAN || gradient == INFINITY)
+		return new ScanBucket(*this);
+	else
+		return new ScanBucket(x + 1 / gradient, max_y, gradient);
+}
+
+CGeneratorBarrier* GeometricLine::ScanBucket::getNextBarrier(const int now_y) const
+{
+	return updata(now_y);
+}
