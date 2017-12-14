@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Graphic">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <NestedTypes>
+      <Struct Name="Graphic::__unnamed_struct_0005_1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphic.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQwAEAAAAAADAQAAAAMCAAAAAAAAAABAAAAAAAIAAE=</HashCode>
+      <FileName>Graphic.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Polygon">
+    <Position X="3" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAkACQAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAIACA=</HashCode>
+      <FileName>Polygon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

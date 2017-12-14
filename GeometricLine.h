@@ -34,6 +34,8 @@ public:
 
 	private:
 		int max_y;
+		int init_x;
+		int count;
 		double gradient;
 		bool isOutofDate(const int cmp_y) const
 		{
