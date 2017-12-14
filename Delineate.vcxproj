@@ -152,6 +152,7 @@
     <ClInclude Include="PolygonRim.h" />
     <ClInclude Include="RectangleRim.h" />
     <ClInclude Include="StraightLine.h" />
+    <ClInclude Include="Typedef.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

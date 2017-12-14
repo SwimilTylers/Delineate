@@ -18,7 +18,7 @@ public:
 	class ScanBucket : public CGeneratorBarrier
 	{
 	public:
-		ScanBucket(const int x, const int max_y, const double gradient)
+		ScanBucket(const double x, const int max_y, const double gradient)
 			: max_y(max_y),
 			  gradient(gradient)
 		{
@@ -34,8 +34,6 @@ public:
 
 	private:
 		int max_y;
-		int init_x;
-		int count;
 		double gradient;
 		bool isOutofDate(const int cmp_y) const
 		{

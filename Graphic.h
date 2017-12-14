@@ -12,7 +12,10 @@ public:
 	virtual ~Graphic();
 	virtual std::vector<std::pair<int,int>> EdgeVertices(Window& window)
 	{
-		return Rim.profile->Vertices(window);
+		if (visible_edge)
+			return Rim.profile->Vertices(window);
+		else
+			return std::vector<std::pair<int, int>>();
 	}
 	std::vector<float> getEdgeColor() const;
 	
@@ -22,7 +25,7 @@ public:
 	}
 	std::vector<std::vector<CGeneratorBarrier*>>& getCGProfile()
 	{
-		generateCGProfile();
+		if(CGeneratorProfile.empty()) generateCGProfile();
 		return CGeneratorProfile;
 	}
 	RectangleRim& getUttermost()
@@ -32,8 +35,12 @@ public:
 
 	virtual std::pair<int, int>& getRangeY() = 0;
 
+	void TurnOnEdgeVision() { visible_edge = true; }
+	void TurnOffEdgeVision() { visible_edge = false; }
+
 protected:
 	
+	bool visible_edge = true;
 	RectangleRim uttermost;
 	
 	struct

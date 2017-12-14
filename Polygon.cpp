@@ -1,6 +1,8 @@
 #include "Polygon.h"
-#include <valarray>
+#include <vector>
 
+#define debug_171214_polygon true
+#undef debug_171214_polygon
 
 Polygon::Polygon(PolygonRim& profile, std::vector<float>& RimColor,
 	std::vector<std::pair<std::pair<int, int>, std::vector<float>>>& CGenerators)
@@ -20,7 +22,7 @@ void Polygon::generateCGProfile()
 		std::vector<CGeneratorBarrier*> buf;
 		std::for_each(line.begin(), line.end(), [&buf](GeometricLine::ScanBucket& element)
 		{
-			buf.push_back(&element);
+			buf.push_back(new GeometricLine::ScanBucket(element));
 		});
 		Profile.push_back(buf);
 	});
@@ -42,21 +44,25 @@ void Polygon::generateCGProfile()
 	for (auto& element : CGeneratorProfile)
 	{
 		element.insert(element.end(), buf.begin(), buf.end());
+		std::sort(element.begin(), element.end(), [](CGeneratorBarrier* x, CGeneratorBarrier* y)->bool
+		{
+			return x->get_x() < y->get_x();
+		});
 		buf.clear();
-
+#ifndef debug_171214_polygon
 		std::for_each(element.begin(), element.end(), [&buf, &this_y](CGeneratorBarrier* i_element)
 		{
 			auto chk = i_element->getNextBarrier(this_y);
 			if (chk != nullptr)	buf.push_back(chk);
 		});
 
-		/*
+#else
 		for (auto& i_element : element)
 		{
 			auto chk = i_element->getNextBarrier(this_y);
 			if(chk != nullptr)	buf.push_back(chk);
 		}
-		*/
+#endif
 
 		this_y++;
 	}
@@ -75,6 +81,13 @@ RectangleRim& Polygon::sketchout(PolygonRim& profile)
 		min.first = min.second < element.second ? min.second : element.second;
 	});
 	return *(new RectangleRim(min, max));
+}
+
+Polygon Polygons::getNewPolygon(std::vector<float> edge_color, cgeneratorlist_t cgenerators,
+	std::initializer_list<std::pair<int, int>> vertices)
+{
+	auto&& rim = PolygonRims().getNewRim(vertices);
+	return Polygon(rim, edge_color, cgenerators);
 }
 
 Polygon::~Polygon()

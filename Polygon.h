@@ -1,6 +1,7 @@
 #pragma once
 #include "Graphic.h"
 #include "PolygonRim.h"
+#include "Typedef.h"
 
 class Polygon :
 	public Graphic
@@ -22,5 +23,11 @@ private:
 	PolygonRim::OELServer oel_server;
 
 	static RectangleRim& sketchout(PolygonRim& profile);
+};
+
+class Polygons
+{
+public:
+	static Polygon getNewPolygon(std::vector<float> edge_color, cgeneratorlist_t cgenerators, std::initializer_list<std::pair<int, int>> vertices);
 };
 

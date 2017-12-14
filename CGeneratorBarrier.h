@@ -7,12 +7,12 @@ public:
 
 	int get_x() const
 	{
-		return x;
+		return static_cast<int>(x);
 	}
 
 	virtual CGeneratorBarrier* getNextBarrier(const int now_y) const = 0;
 
 protected:
-	int x;
+	double x;
 };
 

@@ -9,6 +9,7 @@
 #include "EllipseRim.h"
 #include "RectangleRim.h"
 #include "Polygon.h"
+#include "Typedef.h"
 
 using namespace std;
 
@@ -37,22 +38,26 @@ static int PAGE_WIDTH = 1000;
 	static RectangleRim rectangle_rim(pair<int, int>(1100, 400), pair<int, int>(1800, 1400));
 	static RectangleRim colorful_rectangle_rim(pair<int, int>(100, 400), pair<int, int>(300, 800));
 	static vector<float> pencolor = vector<float>(3);
-	pencolor[0] = 0.4;
+	pencolor[0] = 0.1;
 	pencolor[1] = 0.6;
-  	pencolor[2] = 0.2;
-	static vector<pair<pair<int, int>, vector<float>>> cgenerators;
+  	pencolor[2] = 0.8;
+	static cgeneratorlist_t cgenerators;
 	cgenerators.push_back(pair<pair<int, int>, vector<float>>(pair<int, int>(200, 500), pencolor));
 	static Polygon rectangle(colorful_rectangle_rim, pencolor, cgenerators);
 
-	pair<int, int> point_1(500, 700), point_2(600, 800), point_3(800, 500);
+	const pair<int, int> point_1(500, 700), point_2(1400, 800), point_3(800, 100), point_4(650, 200);
+
+	  /*
 	vector<pair<pair<int, int>, pair<int, int>>> perimeter;
 	perimeter.push_back(pair<pair<int, int>, pair<int, int>>(point_1, point_2));
 	perimeter.push_back(pair<pair<int, int>, pair<int, int>>(point_2, point_3));
 	perimeter.push_back(pair<pair<int, int>, pair<int, int>>(point_3, point_1));
 	static PolygonRim polygon_rim(perimeter);
-	cgenerators.pop_back();
+	  */
+	cgenerators.clear();
 	cgenerators.push_back(pair<pair<int, int>, vector<float>>(pair<int, int>(600, 700), pencolor));
-	static Polygon polygon(polygon_rim, pencolor, cgenerators);
+	// static Polygon polygon(polygon_rim, pencolor, cgenerators);
+	static Polygon polygon = Polygons().getNewPolygon(pencolor, cgenerators, { point_1, point_2, point_3, point_4 });
 
 	Player.DrawOutline(line);
 	Player.DrawOutline(line_2);

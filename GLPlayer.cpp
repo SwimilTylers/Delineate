@@ -10,6 +10,8 @@
 using namespace std;
 
 #define FLOAT_PRINT true
+#define foreach_171214 true
+// #undef foreach_171214
 
 inline void PinPoint(const pair<int, int>& pinned, Window WindowNow)
 {
@@ -67,17 +69,19 @@ void GLPlayer::FillGraphic(Graphic& graphic)
 		glBegin(GL_POINTS); 
 		auto&& drawnpoints = graphic.EdgeVertices(WindowNow);
 		auto& win = WindowNow;
+#ifdef foreach_171214
 		for_each(drawnpoints.begin(),drawnpoints.end(), [win](pair<int,int>& drawnpoint)
 		{
 			PinPoint(drawnpoint, win);
 		});
 
-		/*
+#else	
 		for (const pair<int, int> element : graphic.EdgeVertices(WindowNow))
 		{
 			PinPoint(element, WindowNow);
 		}
-		*/
+
+#endif		
 
 		glEnd();
 	}
@@ -90,6 +94,16 @@ void GLPlayer::FillGraphic(Graphic& graphic)
 			glBegin(GL_POINTS);
 			auto&& buf = CGenerationKernel(CGenerator.first, graphic.getRangeY().first, 
 				graphic.getCGProfile(), WindowNow);
+#ifndef foreach_171214
+			for (auto& subline : buf)
+			{
+				for (auto& drawnpoint : subline)
+				{
+					PinPoint(drawnpoint, WindowNow);
+				}
+			}
+
+#else
 			auto &win = WindowNow;
 			for_each(buf.begin(), buf.end(), [&win](vector<pair<int, int>>& subline)
 			{
@@ -98,6 +112,9 @@ void GLPlayer::FillGraphic(Graphic& graphic)
 					PinPoint(drawnpoint, win);
 				});
 			});
+#endif
+
+
 			glEnd();
 		}
 	}
@@ -145,44 +162,20 @@ vector<vector<pair<int, int>>> GLPlayer::CGenerationKernel(std::pair<int, int>& 
 		auto below_line = thisCGCoordinate.second - baseY - 1 > 0
 			? CGeneratorList[thisCGCoordinate.second - baseY - 1]
 			: vector<CGeneratorBarrier*>();
-/*
-		auto above_line = thisCGCoordinate.second - baseY + 1 <= CGeneratorList.size()
-			? CGeneratorList[thisCGCoordinate.second - baseY + 1]
-			: vector<CGeneratorBarrier*>();
-
-		*/
-
 
 		// find out the appropriate section
 
-		int stationary = 0;
+		const vector<CGeneratorBarrier*>::iterator stationary_iter = find_if(this_line.begin(), this_line.end(), [&thisCGCoordinate](CGeneratorBarrier* x)->bool {return x->get_x() > thisCGCoordinate.first; });
+		if (stationary_iter == this_line.end() || stationary_iter == this_line.begin())
+			continue;
 
-		if (this_line.size() < 5)
-		{
-			for (int i = 0; i < this_line.size(); ++i)
-			{
-				if (this_line[i]->get_x() > thisCGCoordinate.first)
-				{
-					stationary = i;
-					break;
-				}
-			}
-			if (stationary == 0)
-				return ret;
-		}
-		else {
-			try {
-				stationary = QuickFind(this_line, thisCGCoordinate);
-			}
-			catch (string) { return ret; }
-		}
-
-		pair<int, int> RangeX(this_line[stationary - 1]->get_x() + 1, this_line[stationary]->get_x() - 1);
+		pair<int, int> RangeX((*(stationary_iter - 1))->get_x() + 1, (*stationary_iter)->get_x() - 1);
 
 
 		// fill out the drawnpoints
 
 		pair<int, int> drawnpoint(RangeX.first, thisCGCoordinate.second);
+
 		for (; drawnpoint.first <= RangeX.second; drawnpoint.first++)
 		{
 			sec_ret.push_back(drawnpoint);
@@ -207,12 +200,7 @@ vector<vector<pair<int, int>>> GLPlayer::CGenerationKernel(std::pair<int, int>& 
 		auto this_line = CGeneratorList[thisCGCoordinate.second - baseY];
 
 		sec_ret.clear();
-
-/*
-		auto below_line = thisCGCoordinate.second - baseY - 1 > 0
-			? CGeneratorList[thisCGCoordinate.second - baseY - 1]
-			: vector<CGeneratorBarrier*>();
-*/		
+		
 		auto above_line = thisCGCoordinate.second - baseY + 1 < CGeneratorList.size()
 		? CGeneratorList[thisCGCoordinate.second - baseY + 1]
 		: vector<CGeneratorBarrier*>();
@@ -222,29 +210,11 @@ vector<vector<pair<int, int>>> GLPlayer::CGenerationKernel(std::pair<int, int>& 
 
 		// find out the appropriate section
 
-		int stationary = 0;
+		const vector<CGeneratorBarrier*>::iterator stationary_iter = find_if(this_line.begin(), this_line.end(), [&thisCGCoordinate](CGeneratorBarrier* x)->bool {return x->get_x() > thisCGCoordinate.first; });
+		if (stationary_iter == this_line.end() || stationary_iter == this_line.begin())
+			continue;
 
-		if (this_line.size() < 5)
-		{
-			for (int i = 0; i < this_line.size(); ++i)
-			{
-				if (this_line[i]->get_x() > thisCGCoordinate.first)
-				{
-					stationary = i;
-					break;
-				}
-			}
-			if (stationary == 0)
-				return ret;
-		}
-		else {
-			try {
-				stationary = QuickFind(this_line, thisCGCoordinate);
-			}
-			catch (string) { return ret; }
-		}
-
-		pair<int, int> RangeX(this_line[stationary - 1]->get_x() + 1, this_line[stationary]->get_x() - 1);
+		pair<int, int> RangeX((*(stationary_iter - 1))->get_x() + 1, (*stationary_iter)->get_x() - 1);
 
 
 		// fill out the drawnpoints

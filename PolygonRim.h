@@ -60,3 +60,10 @@ protected:
 	
 };
 
+
+
+class PolygonRims
+{
+public:
+	static PolygonRim getNewRim(std::initializer_list<std::pair<int, int>>& vertices);
+};
