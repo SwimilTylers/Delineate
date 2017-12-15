@@ -4,6 +4,7 @@
 #include "Outline.h"
 #include "StraightLine.h"
 #include "RectangleRim.h"
+#include "Typedef.h"
 
 class Graphic
 {
@@ -17,12 +18,10 @@ public:
 		else
 			return std::vector<std::pair<int, int>>();
 	}
+
+	void setEdgeColor(const pencolor_t edgecolor) { Rim.color = edgecolor; }
 	std::vector<float> getEdgeColor() const;
-	
-	std::vector<std::pair<std::pair<int, int>, std::vector<float>>>& getCGenerators()
-	{
-		return CGenerators;
-	}
+
 	std::vector<std::vector<CGeneratorBarrier*>>& getCGProfile()
 	{
 		if(CGeneratorProfile.empty()) generateCGProfile();
@@ -38,6 +37,9 @@ public:
 	void TurnOnEdgeVision() { visible_edge = true; }
 	void TurnOffEdgeVision() { visible_edge = false; }
 
+	cgeneratorlist_t getCGenerators() const { return CGenerators; }
+	void setCGenerators(const cgeneratorlist_t cgenerators) { CGenerators = cgenerators; }
+
 protected:
 	
 	bool visible_edge = true;
@@ -49,7 +51,7 @@ protected:
 		std::vector<float> color;
 	}Rim;
 
-	std::vector<std::pair<std::pair<int, int>, std::vector<float>>> CGenerators;
+	cgeneratorlist_t CGenerators;
 	std::vector<std::vector<CGeneratorBarrier*>> CGeneratorProfile;
 	virtual void generateCGProfile() = 0;
 };

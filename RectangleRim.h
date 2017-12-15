@@ -1,11 +1,14 @@
 #pragma once
 #include "PolygonRim.h"
+
 class RectangleRim :
 	public PolygonRim
 {
 public:
 	RectangleRim(std::pair<int, int> leftdown, std::pair<int, int> rightup);
 	~RectangleRim();
+
+	std::pair<int, int> getCentr() const;
 
 	static std::vector<std::pair<std::pair<int,int>,std::pair<int,int>>> regularize(std::pair<int, int>& leftdown, std::pair<int, int>& rightup)
 	{
@@ -18,5 +21,8 @@ public:
 		ret.push_back(std::pair<std::pair<int, int>, std::pair<int, int>>(leftdown, rightdown));
 		return ret;
 	}
+
+private:
+	std::pair<int, int> centr;
 };
 

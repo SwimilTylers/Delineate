@@ -37,15 +37,15 @@ static int PAGE_WIDTH = 1000;
 	static EllipseRim ellipse_rim(geometric_ellipse);
 	static RectangleRim rectangle_rim(pair<int, int>(1100, 400), pair<int, int>(1800, 1400));
 	static RectangleRim colorful_rectangle_rim(pair<int, int>(100, 400), pair<int, int>(300, 800));
-	static vector<float> pencolor = vector<float>(3);
+	static pencolor_t pencolor(3);
 	pencolor[0] = 0.1;
 	pencolor[1] = 0.6;
   	pencolor[2] = 0.8;
 	static cgeneratorlist_t cgenerators;
-	cgenerators.push_back(pair<pair<int, int>, vector<float>>(pair<int, int>(200, 500), pencolor));
+	cgenerators.push_back(pair<pair<int, int>, pencolor_t>(pair<int, int>(200, 500), pencolor));
 	static Polygon rectangle(colorful_rectangle_rim, pencolor, cgenerators);
 
-	const pair<int, int> point_1(500, 700), point_2(1400, 800), point_3(800, 100), point_4(650, 200);
+	const pair<int, int> point_1(500, 700), point_2(800, 800), point_3(800, 100), point_4(650, 200);
 
 	  /*
 	vector<pair<pair<int, int>, pair<int, int>>> perimeter;
@@ -55,10 +55,13 @@ static int PAGE_WIDTH = 1000;
 	static PolygonRim polygon_rim(perimeter);
 	  */
 	cgenerators.clear();
-	cgenerators.push_back(pair<pair<int, int>, vector<float>>(pair<int, int>(600, 700), pencolor));
+	cgenerators.push_back(pair<pair<int, int>, pencolor_t>(pair<int, int>(600, 700), pencolor));
 	// static Polygon polygon(polygon_rim, pencolor, cgenerators);
 	static Polygon polygon = Polygons().getNewPolygon(pencolor, cgenerators, { point_1, point_2, point_3, point_4 });
-
+	static RectangleRim polygon_sketchout = polygon.getUttermost();
+	static Polygon polygon_disp = Polygons().getRelocatedNewPolygon(polygon, pair<int,int>(800, 1200));
+	static Polygon polygon_rotate = Polygons().getRotatedNewPolygon(polygon, 0.3);
+	static Polygon polygon_scale = Polygons().getScaledNewPolygon(polygon, pair<double, double>(0.5, 0.5));
 	Player.DrawOutline(line);
 	Player.DrawOutline(line_2);
 	Player.DrawOutline(line_3);
@@ -66,7 +69,11 @@ static int PAGE_WIDTH = 1000;
 	Player.DrawOutline(ellipse_rim);
 	Player.DrawOutline(rectangle_rim);
 	Player.FillGraphic(rectangle);
-	Player.FillGraphic(polygon);
+//	Player.FillGraphic(polygon);
+	Player.DrawOutline(polygon_sketchout);
+	Player.FillGraphic(polygon_disp);
+	Player.FillGraphic(polygon_rotate);
+	Player.FillGraphic(polygon_scale);
 	glFlush();
 }
 #elif TEST_ONE

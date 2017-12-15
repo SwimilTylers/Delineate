@@ -59,6 +59,22 @@ bool PolygonRim::not_collide(Window& window)
 	return true;
 }
 
+PolygonRim PolygonRims::getNewRim(std::vector<std::pair<int, int>>& vertices)
+{
+	if (empty(vertices))
+		throw nullptr;
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> perimeter;
+	std::pair<int, int> buf = *vertices.begin();
+	for (auto vertex = vertices.begin() + 1; vertex != vertices.end(); ++vertex)
+	{
+		const auto this_element = std::pair<std::pair<int, int>, std::pair<int, int>>(buf, *vertex);
+		perimeter.push_back(this_element);
+		buf = *vertex;
+	}
+	perimeter.push_back(std::pair<std::pair<int, int>, std::pair<int, int>>(buf, *vertices.begin()));
+	return PolygonRim(perimeter);
+}
+
 PolygonRim PolygonRims::getNewRim(std::initializer_list<std::pair<int, int>>& vertices)
 {
 	if (empty(vertices))

@@ -1,8 +1,12 @@
 #include "Polygon.h"
 #include <vector>
+#include "Matrix.h"
+//#include <iostream>
 
 #define debug_171214_polygon true
 #undef debug_171214_polygon
+#define debug_polygon_171215 true
+#undef debug_polygon_171215
 
 Polygon::Polygon(PolygonRim& profile, std::vector<float>& RimColor,
 	std::vector<std::pair<std::pair<int, int>, std::vector<float>>>& CGenerators)
@@ -71,16 +75,23 @@ void Polygon::generateCGProfile()
 RectangleRim& Polygon::sketchout(PolygonRim& profile)
 {
 	auto vertices = profile.getApexes();
-	std::pair<int, int> max, min;
+	std::pair<int, int> max(0x80000000,0x80000000), min(0x7fffffff, 0x7fffffff);
 	std::for_each(vertices.begin(), vertices.end(), [&max, &min](std::pair<int,int> element)
 	{
 		max.first = max.first > element.first ? max.first : element.first;
 		max.second = max.second > element.second ? max.second : element.second;
 
 		min.first = min.first < element.first ? min.first : element.first;
-		min.first = min.second < element.second ? min.second : element.second;
+		min.second = min.second < element.second ? min.second : element.second;
 	});
 	return *(new RectangleRim(min, max));
+}
+
+Polygon Polygons::getNewPolygon(std::vector<float> edge_color, cgeneratorlist_t cgenerators,
+	std::vector<std::pair<int, int>> vertices)
+{
+	auto&& rim = PolygonRims().getNewRim(vertices);
+	return Polygon(rim, edge_color, cgenerators);
 }
 
 Polygon Polygons::getNewPolygon(std::vector<float> edge_color, cgeneratorlist_t cgenerators,
@@ -90,7 +101,88 @@ Polygon Polygons::getNewPolygon(std::vector<float> edge_color, cgeneratorlist_t 
 	return Polygon(rim, edge_color, cgenerators);
 }
 
+Polygon Polygons::getRelocatedNewPolygon(Polygon& old_polygon, const std::pair<int, int> new_centr)
+{
+	const auto old_centr = old_polygon.getUttermost().getCentr();
+	auto&& matrix = mtx::relocate(std::pair<int,int>(new_centr.first - old_centr.first, new_centr.second - old_centr.second));
+	
+	// std::cout << matrix.toString();
+	
+	auto&& vertices = old_polygon.getProfile().getApexes();
+#ifndef debug_polygon_171215
+	std::for_each(vertices.begin(), vertices.end(), [& matrix](std::pair<int,int>& point)
+	{
+		point = (matrix * point).coordinate();
+	});
+#else
+	for (auto && vertex : vertices)
+	{
+		vertex = (matrix * vertex).coordinate();
+	}
+#endif
+	auto cgenerators = old_polygon.getCGenerators();
+
+	std::for_each(cgenerators.begin(), cgenerators.end(), [&matrix](std::pair<std::pair<int, int>, pencolor_t>& cgenerator)
+	{
+		cgenerator.first = (matrix * cgenerator.first).coordinate();
+	});
+
+	return getNewPolygon(old_polygon.getEdgeColor(), cgenerators, vertices);
+}
+
+Polygon Polygons::getScaledNewPolygon(Polygon& old_polygon, const std::pair<double,double> ratio)
+{
+	const auto old_centr = old_polygon.getUttermost().getCentr();
+	auto&& matrix = mtx::relocate(std::pair<int, int>(old_centr.first, old_centr.second))
+		* (mtx::scale(ratio)
+		* mtx::relocate(std::pair<int, int>(-old_centr.first, -old_centr.second)));
+	auto&& vertices = old_polygon.getProfile().getApexes();
+	std::for_each(vertices.begin(), vertices.end(), [&matrix](std::pair<int, int>& point)
+	{
+		point = (matrix * point).coordinate();
+	});
+	auto cgenerators = old_polygon.getCGenerators();
+
+	std::for_each(cgenerators.begin(), cgenerators.end(), [&matrix](std::pair<std::pair<int, int>, pencolor_t>& cgenerator)
+	{
+		cgenerator.first = (matrix * cgenerator.first).coordinate();
+	});
+
+	return getNewPolygon(old_polygon.getEdgeColor(), cgenerators, vertices);
+}
+
+Polygon Polygons::getRotatedNewPolygon(Polygon& old_polygon, const double rad)
+{
+	const auto old_centr = old_polygon.getUttermost().getCentr();
+	auto&& matrix = mtx::relocate(std::pair<int, int>(old_centr.first, old_centr.second))
+		* (mtx::rotate(rad)
+		* mtx::relocate(std::pair<int, int>(-old_centr.first, -old_centr.second)));
+	auto&& vertices = old_polygon.getProfile().getApexes();
+
+//	std::cout << matrix.toString();
+
+	std::for_each(vertices.begin(), vertices.end(), [&matrix](std::pair<int, int>& point)
+	{
+		point = (matrix * point).coordinate();
+	});
+	auto cgenerators = old_polygon.getCGenerators();
+
+	std::for_each(cgenerators.begin(), cgenerators.end(), [&matrix](std::pair<std::pair<int, int>, pencolor_t>& cgenerator)
+	{
+		cgenerator.first = (matrix * cgenerator.first).coordinate();
+	});
+
+	return getNewPolygon(old_polygon.getEdgeColor(), cgenerators, vertices);
+}
+
 Polygon::~Polygon()
 {
+	std::for_each(CGeneratorProfile.begin(), CGeneratorProfile.end(), [](std::vector<CGeneratorBarrier*>& line)
+	{
+		std::for_each(line.begin(), line.end(), [](CGeneratorBarrier* element)
+		{
+			delete element;
+		});
+	});
 }
 

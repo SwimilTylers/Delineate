@@ -147,6 +147,7 @@
     <ClInclude Include="GeometricLine.h" />
     <ClInclude Include="GLPlayer.h" />
     <ClInclude Include="Graphic.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Outline.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="PolygonRim.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MouseAcvtiveMove.cpp" />
     <ClCompile Include="MouseClick.cpp" />
     <ClCompile Include="Outline.cpp" />

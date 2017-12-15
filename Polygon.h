@@ -15,6 +15,10 @@ public:
 	{
 		return oel_server.getRangeY();
 	}
+	PolygonRim getProfile() const
+	{
+		return profile;
+	}
 
 protected:
 	void generateCGProfile() override;
@@ -28,6 +32,10 @@ private:
 class Polygons
 {
 public:
+	static Polygon getNewPolygon(std::vector<float> edge_color, cgeneratorlist_t cgenerators, std::vector<std::pair<int, int>> vertices);
 	static Polygon getNewPolygon(std::vector<float> edge_color, cgeneratorlist_t cgenerators, std::initializer_list<std::pair<int, int>> vertices);
+	static Polygon getRelocatedNewPolygon(Polygon& old_polygon, std::pair<int, int> new_centr);
+	static Polygon getScaledNewPolygon(Polygon& old_polygen, std::pair<double, double> ratio);
+	static Polygon getRotatedNewPolygon(Polygon& old_polygon, double rad);
 };
 

@@ -78,6 +78,9 @@
     <ClInclude Include="Typedef.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLPlayer.cpp">
@@ -130,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="Polygon.cpp">
       <Filter>源文件\SolidDescriptives</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

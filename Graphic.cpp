@@ -12,6 +12,13 @@ Graphic::Graphic(RectangleRim& uttermost, Outline* Rim, std::vector<float>& RimC
 
 Graphic::~Graphic()
 {
+	std::for_each(CGeneratorProfile.begin(), CGeneratorProfile.end(), [](std::vector<CGeneratorBarrier*>& line)
+	{
+		std::for_each(line.begin(),line.end(), [](CGeneratorBarrier* element)
+		{
+			delete element;
+		});
+	});
 }
 
 std::vector<float> Graphic::getEdgeColor() const
