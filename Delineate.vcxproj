@@ -147,6 +147,7 @@
     <ClInclude Include="GeometricLine.h" />
     <ClInclude Include="GLPlayer.h" />
     <ClInclude Include="Graphic.h" />
+    <ClInclude Include="Liang_Barsky_Algorithm.h" />
     <ClInclude Include="LineCutAlgorithm.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Outline.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="RectangleWindowRim.h" />
     <ClInclude Include="StraightLine.h" />
     <ClInclude Include="Typedef.h" />
+    <ClInclude Include="Weiler_Atherton_Algorithm.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +170,7 @@
     <ClCompile Include="GeometricLine.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="Graphic.cpp" />
+    <ClCompile Include="Liang_Barsky_Algorithm.cpp" />
     <ClCompile Include="LineCutAlgorithm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
@@ -180,6 +183,7 @@
     <ClCompile Include="RectangleRim.cpp" />
     <ClCompile Include="RectangleWindowRim.cpp" />
     <ClCompile Include="StraightLine.cpp" />
+    <ClCompile Include="Weiler_Atherton_Algorithm.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>

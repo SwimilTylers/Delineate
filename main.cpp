@@ -8,6 +8,7 @@
 #include "GeometricEllipse.h"
 #include "EllipseRim.h"
 #include "RectangleRim.h"
+#include "RectangleWindowRim.h"
 #include "Polygon.h"
 #include "Typedef.h"
 
@@ -37,6 +38,7 @@ static int PAGE_WIDTH = 1000;
 	static EllipseRim ellipse_rim(geometric_ellipse);
 	static RectangleRim rectangle_rim(pair<int, int>(1100, 400), pair<int, int>(1800, 1400));
 	static RectangleRim colorful_rectangle_rim(pair<int, int>(100, 400), pair<int, int>(300, 800));
+	static RectangleWindowRim rectangle_window_rim(pair<int, int>(200, 400), pair<int, int>(1100, 800), nullptr, nullptr);
 	static pencolor_t pencolor(3);
 	pencolor[0] = 0.1;
 	pencolor[1] = 0.6;
@@ -69,6 +71,7 @@ static int PAGE_WIDTH = 1000;
 	Player.DrawOutline(circle_rim);
 	Player.DrawOutline(ellipse_rim);
 	Player.DrawOutline(rectangle_rim);
+	Player.DrawOutline(rectangle_window_rim);
 	Player.FillGraphic(rectangle);
 //	Player.FillGraphic(polygon);
 	Player.DrawOutline(polygon_sketchout);

@@ -1,1 +1,5 @@
-﻿  Delineate.vcxproj -> E:\Computer Graphics\Delineate\Debug\Delineate.exe
+﻿  Liang_Barsky_Algorithm.cpp
+e:\computer graphics\delineate\delineate\geometricline.h(25): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\computer graphics\delineate\delineate\geometricline.h(37): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+MouseClick.obj : warning LNK4099: 未找到 PDB“vc141.pdb”(使用“MouseClick.obj”或在“E:\Computer Graphics\Delineate\Debug\vc141.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+  Delineate.vcxproj -> E:\Computer Graphics\Delineate\Debug\Delineate.exe

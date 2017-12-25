@@ -7,8 +7,10 @@ RectangleWindowRim::RectangleWindowRim(std::pair<int, int>& leftdown, std::pair<
 	LineCutAlgorithm* line_cut_server, PolygonCutAlgorithm* polygon_cut_server):
 	RectangleRim(leftdown, rightup)
 {
+#ifdef NULLPTRCHK
 	if (line_cut_server == nullptr || polygon_cut_server == nullptr)
 		throw std::string("cut server must be non-nullptr");
+#endif
 	this->line_cut_server = line_cut_server;
 	this->polygon_cut_server = polygon_cut_server;
 }
