@@ -20,6 +20,10 @@ public:
 	{
 		return orignal.getGradient();
 	}
+	GeometricLine getOriginal() const
+	{
+		return orignal;
+	}
 
 private:
 	GeometricLine orignal;
