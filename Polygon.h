@@ -9,7 +9,6 @@ class Polygon :
 public:
 	Polygon(PolygonRim &profile, std::vector<float>& RimColor, 
 		std::vector<std::pair<std::pair<int, int>, std::vector<float>>>& CGenerators);
-	~Polygon();
 
 	std::pair<int, int>& getRangeY() override
 	{
@@ -19,6 +18,8 @@ public:
 	{
 		return profile;
 	}
+
+	virtual const PolygonRim& getAccessToRim() const override;
 
 protected:
 	void generateCGProfile() override;
@@ -37,5 +38,7 @@ public:
 	static Polygon getRelocatedNewPolygon(Polygon& old_polygon, std::pair<int, int> new_centr);
 	static Polygon getScaledNewPolygon(Polygon& old_polygen, std::pair<double, double> ratio);
 	static Polygon getRotatedNewPolygon(Polygon& old_polygon, double rad);
+	static Polygon getManipulatedNewPolygon(Polygon& old_polygon, std::pair<int, int> disp, std::pair<double, double> ratio, double rad);
+	static Polygon getCutNewPolygon(Polygon& old_polygon, RectangleRim& cutRim);
 };
 

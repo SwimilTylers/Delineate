@@ -15,6 +15,11 @@ Polygon::Polygon(PolygonRim& profile, std::vector<float>& RimColor,
 {
 }
 
+const PolygonRim& Polygon::getAccessToRim() const
+{
+	return *static_cast<const PolygonRim*>(Rim.profile);
+}
+
 void Polygon::generateCGProfile()
 {
 	auto OEL = oel_server.get_ordered_edge_list();
@@ -175,14 +180,40 @@ Polygon Polygons::getRotatedNewPolygon(Polygon& old_polygon, const double rad)
 	return getNewPolygon(old_polygon.getEdgeColor(), cgenerators, vertices);
 }
 
-Polygon::~Polygon()
+Polygon Polygons::getManipulatedNewPolygon(Polygon& old_polygon, const std::pair<int, int> disp,
+                                           const std::pair<double, double> ratio, const double rad)
 {
-	std::for_each(CGeneratorProfile.begin(), CGeneratorProfile.end(), [](std::vector<CGeneratorBarrier*>& line)
+	const auto old_centr = old_polygon.getUttermost().getCentr();
+	auto&& matrix = mtx::relocate(std::pair<int, int>(old_centr.first + disp.first, old_centr.second + disp.second))
+		* mtx::rotate(rad) * mtx::scale(ratio)
+			* mtx::relocate(std::pair<int, int>(-old_centr.first, -old_centr.second));
+	auto&& vertices = old_polygon.getProfile().getApexes();
+	std::for_each(vertices.begin(), vertices.end(), [&matrix](std::pair<int, int>& point)
 	{
-		std::for_each(line.begin(), line.end(), [](CGeneratorBarrier* element)
-		{
-			delete element;
-		});
+		point = (matrix * point).coordinate();
 	});
+	auto cgenerators = old_polygon.getCGenerators();
+
+	std::for_each(cgenerators.begin(), cgenerators.end(), [&matrix](std::pair<std::pair<int, int>, pencolor_t>& cgenerator)
+	{
+		cgenerator.first = (matrix * cgenerator.first).coordinate();
+	});
+
+	return getNewPolygon(old_polygon.getEdgeColor(), cgenerators, vertices);
+}
+
+Polygon Polygons::getCutNewPolygon(Polygon& old_polygon, RectangleRim& cutRim)
+{
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> initVectorPairs;
+	switch (rect::RectangleRelation(cutRim, old_polygon.getUttermost()))
+	{
+	case rect::NON_INTERSECT:break;
+	case rect::IDENTICAL:
+	case rect::IMPLICATE_SUPER:	return old_polygon;
+	case rect::IMPLICATE_SUB:
+	case rect::INTERSECT:
+	default: throw std::string("corrupted response");
+	}
+	throw nullptr;
 }
 

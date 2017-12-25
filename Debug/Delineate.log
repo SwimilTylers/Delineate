@@ -1,5 +1,4 @@
-﻿  PolygonRim.cpp
+﻿  Polygon.cpp
 e:\computer graphics\delineate\delineate\geometricline.h(25): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\computer graphics\delineate\delineate\geometricline.h(37): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\polygonrim.cpp(107): warning C4018: “<”: 有符号/无符号不匹配
-e:\computer graphics\delineate\delineate\polygonrim.cpp(118): warning C4018: “<”: 有符号/无符号不匹配
+  Delineate.vcxproj -> E:\Computer Graphics\Delineate\Debug\Delineate.exe

@@ -6,14 +6,14 @@ class RectangleRim;
 
 namespace rect
 {
-	enum
+	enum RECT_RELATION
 	{
 		NON_INTERSECT, 
 		INTERSECT, 
 		IMPLICATE_SUB, 
 		IMPLICATE_SUPER, 
 		IDENTICAL
-	} RECT_RELATION;
+	};
 
 	relation_t RectangleRelation(RectangleRim& x, RectangleRim& y);
 }

@@ -62,6 +62,7 @@ static int PAGE_WIDTH = 1000;
 	static Polygon polygon_disp = Polygons().getRelocatedNewPolygon(polygon, pair<int,int>(800, 1200));
 	static Polygon polygon_rotate = Polygons().getRotatedNewPolygon(polygon, 0.3);
 	static Polygon polygon_scale = Polygons().getScaledNewPolygon(polygon, pair<double, double>(0.5, 0.5));
+	static Polygon polygon_manip = Polygons().getManipulatedNewPolygon(polygon, pair<int, int>(500, 500), pair<double, double>(1.2, 0.8), 0.4);
 	Player.DrawOutline(line);
 	Player.DrawOutline(line_2);
 	Player.DrawOutline(line_3);
@@ -74,6 +75,7 @@ static int PAGE_WIDTH = 1000;
 	Player.FillGraphic(polygon_disp);
 	Player.FillGraphic(polygon_rotate);
 	Player.FillGraphic(polygon_scale);
+	Player.FillGraphic(polygon_manip);
 	glFlush();
 }
 #elif TEST_ONE
