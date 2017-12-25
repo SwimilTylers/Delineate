@@ -154,6 +154,7 @@
     <ClInclude Include="PolygonCutAlgorithm.h" />
     <ClInclude Include="PolygonRim.h" />
     <ClInclude Include="RectangleRim.h" />
+    <ClInclude Include="RectangleWindowRim.h" />
     <ClInclude Include="StraightLine.h" />
     <ClInclude Include="Typedef.h" />
     <ClInclude Include="Window.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="PolygonCutAlgorithm.cpp" />
     <ClCompile Include="PolygonRim.cpp" />
     <ClCompile Include="RectangleRim.cpp" />
+    <ClCompile Include="RectangleWindowRim.cpp" />
     <ClCompile Include="StraightLine.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

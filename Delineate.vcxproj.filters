@@ -93,6 +93,9 @@
     <ClInclude Include="PolygonCutAlgorithm.h">
       <Filter>头文件\PluginAlgorithm</Filter>
     </ClInclude>
+    <ClInclude Include="RectangleWindowRim.h">
+      <Filter>头文件\HollowPerimeter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLPlayer.cpp">
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="PolygonCutAlgorithm.cpp">
       <Filter>源文件\PluginAlgorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangleWindowRim.cpp">
+      <Filter>源文件\HollowPerimeter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
