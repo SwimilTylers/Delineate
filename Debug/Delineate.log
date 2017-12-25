@@ -1,4 +1,7 @@
-﻿  Polygon.cpp
+﻿  PolygonCutAlgorithm.cpp
 e:\computer graphics\delineate\delineate\geometricline.h(25): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\computer graphics\delineate\delineate\geometricline.h(37): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+  正在生成代码...
+  正在跳过...(未检测到相关更改)
+  LineCutAlgorithm.cpp
   Delineate.vcxproj -> E:\Computer Graphics\Delineate\Debug\Delineate.exe

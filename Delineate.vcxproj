@@ -147,9 +147,11 @@
     <ClInclude Include="GeometricLine.h" />
     <ClInclude Include="GLPlayer.h" />
     <ClInclude Include="Graphic.h" />
+    <ClInclude Include="LineCutAlgorithm.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Outline.h" />
     <ClInclude Include="Polygon.h" />
+    <ClInclude Include="PolygonCutAlgorithm.h" />
     <ClInclude Include="PolygonRim.h" />
     <ClInclude Include="RectangleRim.h" />
     <ClInclude Include="StraightLine.h" />
@@ -165,12 +167,14 @@
     <ClCompile Include="GeometricLine.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="Graphic.cpp" />
+    <ClCompile Include="LineCutAlgorithm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MouseAcvtiveMove.cpp" />
     <ClCompile Include="MouseClick.cpp" />
     <ClCompile Include="Outline.cpp" />
     <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="PolygonCutAlgorithm.cpp" />
     <ClCompile Include="PolygonRim.cpp" />
     <ClCompile Include="RectangleRim.cpp" />
     <ClCompile Include="StraightLine.cpp" />

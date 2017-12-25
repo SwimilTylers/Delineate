@@ -31,6 +31,12 @@
     <Filter Include="源文件\HollowPerimeter">
       <UniqueIdentifier>{c1a9568a-aa5e-4161-9846-9a58f4b591e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\PluginAlgorithm">
+      <UniqueIdentifier>{dc48c873-a81c-4570-8291-246e0339fd1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\PluginAlgorithm">
+      <UniqueIdentifier>{0fd3b333-82dd-4ae1-9750-b17c2bd44930}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLPlayer.h">
@@ -80,6 +86,12 @@
     </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LineCutAlgorithm.h">
+      <Filter>头文件\PluginAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="PolygonCutAlgorithm.h">
+      <Filter>头文件\PluginAlgorithm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +148,12 @@
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCutAlgorithm.cpp">
+      <Filter>源文件\PluginAlgorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="PolygonCutAlgorithm.cpp">
+      <Filter>源文件\PluginAlgorithm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
