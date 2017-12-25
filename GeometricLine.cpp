@@ -8,6 +8,11 @@ GeometricLine::GeometricLine(const std::pair<int, int> point_1, const std::pair<
 	end = point_2;
 	deltas = std::pair<int, int>(point_1.first - point_2.first, point_1.second - point_2.second);
 	gradient = double(deltas.second) / deltas.first;
+
+	left = start.first < end.first ? start.first : end.first;
+	right = start.first > end.first ? start.first : end.first;
+	up = start.second > end.second ? start.second : end.second;
+	down = start.second < end.second ? start.second : end.second;
 }
 
 
@@ -25,7 +30,7 @@ std::pair<int, int> GeometricLine::get_deltas() const
 	return deltas;
 }
 
-std::pair<std::pair<int, int>, std::pair<int, int>> GeometricLine::get_vertices()
+std::pair<std::pair<int, int>, std::pair<int, int>> GeometricLine::get_vertices() const
 {
 	return std::pair<std::pair<int, int>, std::pair<int, int>>(start, end);
 }

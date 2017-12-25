@@ -19,9 +19,16 @@ Graphic::~Graphic()
 			delete element;
 		});
 	});
+
+	delete Rim.profile;
 }
 
 std::vector<float> Graphic::getEdgeColor() const
 {
 	return Rim.color;
+}
+
+const Outline& Graphic::getAccessToRim() const
+{
+	return *static_cast<const Outline*>(Rim.profile);
 }

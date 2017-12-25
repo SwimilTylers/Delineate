@@ -12,8 +12,32 @@ public:
 
 	double getGradient() const;
 	std::pair<int, int> get_deltas() const;
-	std::pair<std::pair<int, int>, std::pair<int, int>> get_vertices();
+	std::pair<std::pair<int, int>, std::pair<int, int>> get_vertices() const;
 	GeometricLine *compatibility(Window& window);
+	std::pair<bool, std::pair<int, int>> onLine_x(const int x) const
+	{
+		std::pair<int, int> ret;
+		bool isOn = false;
+		if (x <= right && x >= left)
+		{
+			isOn = true;
+			ret.first = x;
+			ret.second = gradient * (x - start.first) + start.second;
+		}
+		return std::pair<bool, std::pair<int, int>>(isOn, ret);
+	}
+	std::pair<bool, std::pair<int, int>> onLine_y(const int y) const
+	{
+		std::pair<int, int> ret;
+		bool isOn = false;
+		if (y <= up && y >= down)
+		{
+			isOn = true;
+			ret.second = y;
+			ret.first = (y - start.second) / gradient + start.first;
+		}
+		return std::pair<bool, std::pair<int, int>>(isOn, ret);
+	}
 
 	class ScanBucket : public CGeneratorBarrier
 	{
@@ -61,6 +85,7 @@ public:
 private:
 	std::pair<int, int> deltas;
 	std::pair<int, int> start, end;
+	int left, right, up, down;
 	double gradient;
 };
 

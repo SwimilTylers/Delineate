@@ -33,6 +33,7 @@ public:
 	}
 
 	virtual std::pair<int, int>& getRangeY() = 0;
+	virtual const Outline& getAccessToRim() const;
 
 	void TurnOnEdgeVision() { visible_edge = true; }
 	void TurnOffEdgeVision() { visible_edge = false; }

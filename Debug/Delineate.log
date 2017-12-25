@@ -1,47 +1,12 @@
 ﻿  main.cpp
-  Window.cpp
-  StraightLine.cpp
-  RectangleRim.cpp
-  PolygonRim.cpp
-e:\computer graphics\delineate\delineate\polygonrim.cpp(107): warning C4018: “<”: 有符号/无符号不匹配
-e:\computer graphics\delineate\delineate\polygonrim.cpp(118): warning C4018: “<”: 有符号/无符号不匹配
   Polygon.cpp
-  Outline.cpp
-  MouseClick.cpp
-  Matrix.cpp
-e:\computer graphics\delineate\delineate\matrix.cpp(69): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\matrix.cpp(70): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\matrix.cpp(76): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\matrix.cpp(77): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\matrix.cpp(88): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\matrix.cpp(89): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\matrix.cpp(95): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\matrix.cpp(96): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-  Graphic.cpp
-  GeometricLine.cpp
-  GeometricEllipse.cpp
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.12.25827\include\utility(200): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-  e:\computer graphics\delineate\delineate\geometricellipse.cpp(11): note: 参见对正在编译的函数 模板 实例化“std::pair<int,int>::pair<double,const _Ty2&,0>(_Other1 &&,_Other2) noexcept”的引用
-          with
-          [
-              _Ty2=int,
-              _Other1=double,
-              _Other2=const int &
-          ]
-  e:\computer graphics\delineate\delineate\geometricellipse.cpp(10): note: 参见对正在编译的函数 模板 实例化“std::pair<int,int>::pair<double,const _Ty2&,0>(_Other1 &&,_Other2) noexcept”的引用
-          with
-          [
-              _Ty2=int,
-              _Other1=double,
-              _Other2=const int &
-          ]
-  GeometricCircle.cpp
+e:\computer graphics\delineate\delineate\geometricline.h(25): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+e:\computer graphics\delineate\delineate\geometricline.h(37): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
   GLPlayer.cpp
 e:\computer graphics\delineate\delineate\glplayer.cpp(34): warning C4018: “>=”: 有符号/无符号不匹配
 e:\computer graphics\delineate\delineate\glplayer.cpp(41): warning C4018: “<=”: 有符号/无符号不匹配
 e:\computer graphics\delineate\delineate\glplayer.cpp(205): warning C4018: “<”: 有符号/无符号不匹配
 e:\computer graphics\delineate\delineate\glplayer.cpp(250): warning C4018: “<”: 有符号/无符号不匹配
-  EllipseRim.cpp
-  CircleRim.cpp
   正在生成代码...
+Graphic.obj : warning LNK4099: 未找到 PDB“vc141.pdb”(使用“Graphic.obj”或在“E:\Computer Graphics\Delineate\Debug\vc141.pdb”中寻找)；正在链接对象，如同没有调试信息一样
   Delineate.vcxproj -> E:\Computer Graphics\Delineate\Debug\Delineate.exe
