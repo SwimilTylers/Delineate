@@ -87,7 +87,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="CGeneratorBarrier.h" />
     <ClInclude Include="CircleRim.h" />
+    <ClInclude Include="ColorPrint.h" />
     <ClInclude Include="EllipseRim.h" />
     <ClInclude Include="GeometricCircle.h" />
     <ClInclude Include="GeometricEllipse.h" />
@@ -154,8 +155,11 @@
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="PolygonCutAlgorithm.h" />
     <ClInclude Include="PolygonRim.h" />
+    <ClInclude Include="Reaction.h" />
+    <ClInclude Include="ReactionServer.h" />
     <ClInclude Include="RectangleRim.h" />
     <ClInclude Include="RectangleWindowRim.h" />
+    <ClInclude Include="ServiceRoutine.h" />
     <ClInclude Include="StraightLine.h" />
     <ClInclude Include="Typedef.h" />
     <ClInclude Include="Weiler_Atherton_Algorithm.h" />
@@ -164,6 +168,7 @@
   <ItemGroup>
     <ClCompile Include="CGeneratorBarrier.cpp" />
     <ClCompile Include="CircleRim.cpp" />
+    <ClCompile Include="Display.cpp" />
     <ClCompile Include="EllipseRim.cpp" />
     <ClCompile Include="GeometricCircle.cpp" />
     <ClCompile Include="GeometricEllipse.cpp" />
@@ -180,8 +185,11 @@
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="PolygonCutAlgorithm.cpp" />
     <ClCompile Include="PolygonRim.cpp" />
+    <ClCompile Include="PromptInteraction.cpp" />
+    <ClCompile Include="ReactionServer.cpp" />
     <ClCompile Include="RectangleRim.cpp" />
     <ClCompile Include="RectangleWindowRim.cpp" />
+    <ClCompile Include="ServiceRoutine.cpp" />
     <ClCompile Include="StraightLine.cpp" />
     <ClCompile Include="Weiler_Atherton_Algorithm.cpp" />
     <ClCompile Include="Window.cpp" />

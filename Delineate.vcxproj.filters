@@ -102,6 +102,18 @@
     <ClInclude Include="Weiler_Atherton_Algorithm.h">
       <Filter>头文件\PluginAlgorithm</Filter>
     </ClInclude>
+    <ClInclude Include="Reaction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ReactionServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceRoutine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorPrint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLPlayer.cpp">
@@ -172,6 +184,18 @@
     </ClCompile>
     <ClCompile Include="Weiler_Atherton_Algorithm.cpp">
       <Filter>源文件\PluginAlgorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="PromptInteraction.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ReactionServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceRoutine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
