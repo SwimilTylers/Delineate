@@ -64,30 +64,6 @@ void GLPlayer::DrawOutline(Outline& outline)
 
 void GLPlayer::FillGraphic(Graphic& graphic)
 {
-	// display the outline of the graphic
-	{
-		auto color = graphic.getEdgeColor();
-		glColor3f(color[0], color[1], color[2]);
-		glBegin(GL_POINTS); 
-		auto&& drawnpoints = graphic.EdgeVertices(WindowNow);
-		auto& win = WindowNow;
-#ifdef foreach_171214
-		for_each(drawnpoints.begin(),drawnpoints.end(), [win](pair<int,int>& drawnpoint)
-		{
-			PinPoint(drawnpoint, win);
-		});
-
-#else	
-		for (const pair<int, int> element : graphic.EdgeVertices(WindowNow))
-		{
-			PinPoint(element, WindowNow);
-		}
-
-#endif		
-
-		glEnd();
-	}
-
 	// fill the texture
 	{
 		for (auto CGenerator : graphic.getCGenerators())
@@ -121,6 +97,22 @@ void GLPlayer::FillGraphic(Graphic& graphic)
 		}
 	}
 	
+	// display the outline of the graphic
+	{
+		auto color = graphic.getEdgeColor();
+		glColor3f(color[0], color[1], color[2]);
+		glBegin(GL_POINTS);
+		auto&& drawnpoints = graphic.EdgeVertices(WindowNow);
+		auto& win = WindowNow;
+
+		for_each(drawnpoints.begin(), drawnpoints.end(), [win](pair<int, int>& drawnpoint)
+		{
+			PinPoint(drawnpoint, win);
+		});
+
+		glEnd();
+	}
+
 }
 
 Window& GLPlayer::getWindow()

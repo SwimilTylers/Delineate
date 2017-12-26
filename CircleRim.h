@@ -16,9 +16,11 @@ public:
 	std::vector<std::pair<int, int>> Vertices(Window& window_now) override;
 
 protected:
-	GeometricCircle& orignal;
+	GeometricCircle* orignal;
 	bool isComplete = false;
 	std::vector<std::pair<int, int>> Trajectory;
+
+	CircleRim(GeometricCircle* p_description);
 
 	// during
 	virtual void internal_FirstQuadrant_Upper();

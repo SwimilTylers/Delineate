@@ -35,7 +35,7 @@ void setConsole() {
 }
 
 void setGlut() {
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);      //指定模式：单缓存OR双缓存；RGBA模式OR颜色索引模式  
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);      //指定模式：单缓存OR双缓存；RGBA模式OR颜色索引模式  
 	glutInitWindowSize(PAGE_WIDTH, PAGE_HEIGHT);                    //指定窗口大小（像素）  
 	glutInitWindowPosition(0, 0); 
 	glutCreateWindow("Delineate");
@@ -50,6 +50,8 @@ int main(int argc, char** argv)
 	setGlut();
 
 	setConsole();
+
+	PromptInteraction(GLUT_KEY_F1, 0, 0);
 
 	glutMainLoop();
 	return 0;

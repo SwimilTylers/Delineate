@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <GL\glut.h>
 #include "ReactionServer.h"
-#include "ColorPrint.h"
+#include "Reaction.h"
 using namespace std;
 
 ReactionServer server;
@@ -46,6 +46,7 @@ void PromptInteraction(int key, int x, int y) {
 			server(prompt);
 		}
 		clog << "Dialog Terminated" << endl;
+		Display();
 		break;
 	default:
 		break;

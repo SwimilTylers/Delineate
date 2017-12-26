@@ -1,11 +1,14 @@
 ﻿  ReactionServer.cpp
 e:\computer graphics\delineate\delineate\geometricline.h(25): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\computer graphics\delineate\delineate\geometricline.h(37): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-  正在生成代码...
-  正在编译...
-  PromptInteraction.cpp
-  正在生成代码...
-  正在跳过...(未检测到相关更改)
-  main.cpp
-  Display.cpp
-  Delineate.vcxproj -> E:\Computer Graphics\Delineate\Debug\Delineate.exe
+e:\computer graphics\delineate\delineate\reactionserver.cpp(367): error C2679: 二进制“=”: 没有找到接受“Graphic *”类型的右操作数的运算符(或没有可接受的转换)
+  e:\computer graphics\delineate\delineate\reactionserver.h(61): note: 可能是“ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic>::operator =(ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &&) noexcept(<expr>)”
+  e:\computer graphics\delineate\delineate\reactionserver.h(61): note: 或    “ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic>::operator =(const ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &)”
+  e:\computer graphics\delineate\delineate\reactionserver.cpp(367): note: 尝试匹配参数列表“(ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic>, Graphic *)”时
+e:\computer graphics\delineate\delineate\reactionserver.cpp(371): error C2679: 二进制“=”: 没有找到接受“Graphic *”类型的右操作数的运算符(或没有可接受的转换)
+  e:\computer graphics\delineate\delineate\reactionserver.h(61): note: 可能是“ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic>::operator =(ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &&) noexcept(<expr>)”
+  e:\computer graphics\delineate\delineate\reactionserver.h(61): note: 或    “ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic>::operator =(const ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic> &)”
+  e:\computer graphics\delineate\delineate\reactionserver.cpp(371): note: 尝试匹配参数列表“(ReactionServer::<unnamed-type-selected>::<unnamed-type-graphic>, Graphic *)”时
+e:\computer graphics\delineate\delineate\reactionserver.cpp(405): warning C4806: “!=”: 不安全操作: 从类型“bool”提升到类型“const unsigned int”的值不能等于给定的常量
+e:\computer graphics\delineate\delineate\reactionserver.cpp(412): warning C4806: “!=”: 不安全操作: 从类型“bool”提升到类型“const unsigned int”的值不能等于给定的常量
+e:\computer graphics\delineate\delineate\reactionserver.cpp(421): warning C4806: “!=”: 不安全操作: 从类型“bool”提升到类型“const unsigned int”的值不能等于给定的常量

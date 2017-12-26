@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <algorithm>
 #include <map>
 #include "Outline.h"
 #include "Graphic.h"
@@ -14,6 +15,18 @@ public:
 	~ReactionServer();
 	
 	void operator()(std::string prompt);
+	std::vector<Outline*> serializeOutline() {
+		std::vector<Outline*> ret;
+		std::for_each(Explicit.outlines.begin(), Explicit.outlines.end(), 
+			[&ret](std::pair<std::string, Outline*> x) {ret.push_back(x.second); });
+		return ret;
+	}
+	std::vector<Graphic*> serializeGraphic() {
+		std::vector<Graphic*> ret;
+		std::for_each(Explicit.graphics.begin(), Explicit.graphics.end(),
+			[&ret](std::pair<std::string, Graphic*> x) {ret.push_back(x.second); });
+		return ret;
+	}
 	bool isReadyToExport() const {
 		return isReady;
 	}
@@ -34,9 +47,18 @@ private:
 		RectangleWindowRim* CutWindow = nullptr;
 	} ans;
 
-	struct {
-		Outline* outline = nullptr;
-		Graphic* graphic = nullptr;
+	struct
+	{
+		struct {
+			Outline* ptr = nullptr;
+			bool isAns, isIdle;
+			std::string name;
+		} outline;
+		struct {
+			Graphic* ptr = nullptr;
+			bool isAns, isIdle;
+			std::string name;
+		} graphic;
 	} selected;
 
 	struct {
@@ -54,5 +76,18 @@ private:
 
 	bool add_graphics(std::string name, std::string type, std::vector<std::pair<int, int>> points, std::string properties);
 	bool delete_graphics(std::string name, std::string properties);
-};
 
+	bool select_outline(std::string name);
+	bool select_graphic(std::string name);
+
+	bool record_vertices(std::vector<std::pair<int, int>> vertices) {
+		buffer_vertices.insert(buffer_vertices.end(), vertices.begin(), vertices.end());
+		return true;
+	}
+	bool record_cgenerator(std::string type, std::vector<std::pair<int, int>> vertices, std::string properties);
+
+	bool go(std::string name, std::string properties);
+
+	bool makechange_outline(std::string name, std::string properties);
+	bool makechange_graphics(std::string name, std::string properties);
+};

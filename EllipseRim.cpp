@@ -2,9 +2,9 @@
 #include "GeometricEllipse.h"
 
 
-EllipseRim::EllipseRim(GeometricEllipse &description): CircleRim(description)
+EllipseRim::EllipseRim(GeometricEllipse& description): CircleRim(new GeometricEllipse(description))
 {
-	ellipse = static_cast<GeometricEllipse*>(&description);
+	ellipse = static_cast<GeometricEllipse*>(orignal);
 }
 
 

@@ -4,12 +4,13 @@
 #include "GeometricEllipse.h"
 #include "StraightLine.h"
 #include "EllipseRim.h"
+#include "CircleRim.h"
 #include "Graphic.h"
 #include "Polygon.h"
 #include "Typedef.h"
 #include <cassert>
 #include <iostream>
-
+#include <algorithm>
 
 #define PROMPT_CMD(cmd) (prompt.substr(0, sizeof(cmd) + 1).find(cmd) != std::string::npos)
 
@@ -24,17 +25,6 @@ ReactionServer::~ReactionServer()
 
 
 void ReactionServer::operator()(std::string prompt) {
-	// export: Output instances
-	if (prompt.substr(0, sizeof("export --now ")).find("export --now") != std::string::npos) {
-		isReady = true;
-		return;
-	}
-	if (prompt.find("--immediate") != std::string::npos)
-		isReady = true;
-	else
-		isReady = false;
-
-
 	// -n: Name
 	char buf[100];
 	std::string name;
@@ -75,24 +65,102 @@ void ReactionServer::operator()(std::string prompt) {
 		properties = prompt.substr(mark + 3, prompt.find("$", mark));
 	}
 
+
+	if (prompt.find("@clear-select") != std::string::npos) {
+		selected.outline.ptr = nullptr;
+		selected.graphic.ptr = nullptr;
+	}
+
+	if (prompt.find("@clear-ans") != std::string::npos) {
+		if (ans.outline != nullptr)	delete ans.outline;
+		if (ans.graphic != nullptr)	delete ans.graphic;
+		if (ans.CutWindow != nullptr) delete ans.CutWindow;
+
+		ans.outline = nullptr;
+		ans.graphic = nullptr;
+		ans.CutWindow = nullptr;
+	}
+
+	if (prompt.find("@release-points") != std::string::npos) {
+		buffer_vertices.clear();
+	}
+	if (prompt.find("@release-cgs") != std::string::npos) {
+		buffer_cgenerators.clear();
+	}
+	if (prompt.find("@release-all") != std::string::npos) {
+		buffer_vertices.clear();
+		buffer_cgenerators.clear();
+	}
+
+
 	try {
 		// import: New a Instance
-		if (prompt.substr(0, sizeof("import --temp outline ")).find("import --temp outline") != std::string::npos)
+		if (PROMPT_CMD("import temp outline"))
 			add_outlines(name, type, vertices, properties);
-		else if (prompt.substr(0, sizeof("import --temp graphic ")).find("import --temp graphic") != std::string::npos)
+		else if (PROMPT_CMD("import temp graphic"))
 			add_graphics(name, type, vertices, properties);
 
 		// export: Drop a Instance
-		else if (prompt.substr(0, sizeof("export --trash outline ")).find("import --trash outline") != std::string::npos)
+		else if (PROMPT_CMD("export now")) {
+			isReady = true;
+		}
+		else if (PROMPT_CMD("export trash outline"))
 			delete_graphics(name, properties);
-		else if (prompt.substr(0, sizeof("export --trash graphic ")).find("import --trash graphic") != std::string::npos)
+		else if (PROMPT_CMD("export trash graphic"))
 			delete_graphics(name, properties);
+
+		// select: select a Instance
+		else if (PROMPT_CMD("select outline"))
+			select_outline(name);
+		else if (PROMPT_CMD("select graphic"))
+			select_graphic(name);
+
+		// ease: unselect, or idle
+		else if (PROMPT_CMD("ease outline"))
+			selected.outline.ptr = nullptr;
+		else if (PROMPT_CMD("ease graphic"))
+			selected.graphic.ptr = nullptr;
+		else if (PROMPT_CMD("at ease"));
+
+		// record: set buffers
+		else if (PROMPT_CMD("record points"))
+			record_vertices(vertices);
+		else if (PROMPT_CMD("record cgs"))
+			record_cgenerator(type, vertices, properties);
+
 	}
 	catch (std::string ex) {
 		std::cerr << ex << std::endl;
 	}
 
-	
+	if (prompt.find("immediate#") != std::string::npos)
+		isReady = true;
+
+	if (prompt.find("clear-select#") != std::string::npos) {
+		selected.outline.ptr = nullptr;
+		selected.graphic.ptr = nullptr;
+	}
+
+	if (prompt.find("clear-ans#") != std::string::npos) {
+		if (ans.outline != nullptr)	delete ans.outline;
+		if (ans.graphic != nullptr)	delete ans.graphic;
+		if (ans.CutWindow != nullptr) delete ans.CutWindow;
+
+		ans.outline = nullptr;
+		ans.graphic = nullptr;
+		ans.CutWindow = nullptr;
+	}
+
+	if (prompt.find("release-points#") != std::string::npos) {
+		buffer_vertices.clear();
+	}
+	if (prompt.find("release-cgs#") != std::string::npos) {
+		buffer_cgenerators.clear();
+	}
+	if (prompt.find("release-all#") != std::string::npos) {
+		buffer_vertices.clear();
+		buffer_cgenerators.clear();
+	}
 }
 
 bool ReactionServer::add_outlines(std::string name, std::string type, std::vector<std::pair<int,int>> points, std::string properties) {
@@ -108,7 +176,6 @@ bool ReactionServer::add_outlines(std::string name, std::string type, std::vecto
 
 	if (points.size() == 0) {
 		points = buffer_vertices;
-		buffer_vertices.clear();
 	}
 
 	if (type.size() == 0)
@@ -123,7 +190,7 @@ bool ReactionServer::add_outlines(std::string name, std::string type, std::vecto
 		delete buf.line;
 		break;
 	case 'E':
-		if (properties.find("--UTTERMOST") != std::string::npos) {
+		if (properties.find("--uttermost") != std::string::npos) {
 			if (points.size() != 2)	return false;
 			if (abs(points[0].first - points[1].first) == abs(points[0].second - points[1].second)) {
 				buf.circle = new GeometricCircle(std::pair<int, int>((points[0].first + points[1].first) / 2, (points[0].second + points[1].second) / 2),
@@ -139,14 +206,14 @@ bool ReactionServer::add_outlines(std::string name, std::string type, std::vecto
 				delete buf.ellipse;
 			}
 		}
-		else if(properties.find("--SET-SEMIAXIS") != std::string::npos){
+		else if(properties.find("--set-semiaxis") != std::string::npos){
 			if (points.size() != 1)	return false;
-			auto stt = properties.find("--SET-SEMIAXIS");
+			auto stt = properties.find("--set-semiaxis");
 			if (stt == std::string::npos)
 				return false;
 			buf.integer[0] = 1;
 			buf.integer[1] = 1;
-			buf.integer[2] = sscanf(properties.substr(stt).c_str(), "--SET-SEMIAXIS %d %d", &buf.integer[0], &buf.integer[1]);
+			buf.integer[2] = sscanf(properties.substr(stt).c_str(), "--set-semiaxis %d %d", &buf.integer[0], &buf.integer[1]);
 			assert(buf.integer[2] == 2);
 			if (buf.integer[0] != buf.integer[1]) {
 				buf.ellipse = new GeometricEllipse(points[0], buf.integer[0], buf.integer[1]);
@@ -180,14 +247,14 @@ bool ReactionServer::add_outlines(std::string name, std::string type, std::vecto
 	}
 
 	auto color = outline->getColor();
-	if (properties.find("--SET-COLOR") != std::string::npos) {
-		if (sscanf(properties.substr(properties.find("--SET-COLOR")).c_str(), "--SET-COLOR [%f,%f,%f]", &color[0], &color[1], &color[2]) == 3)
+	if (properties.find("--set-color") != std::string::npos) {
+		if (sscanf(properties.substr(properties.find("--set-color")).c_str(), "--set-color [%f,%f,%f]", &color[0], &color[1], &color[2]) == 3)
 			outline->setColor(color);
 	}
 
 	if (name.size() == 0)
 		ans.outline = outline;
-	else if (properties.find("--IDLE") != std::string::npos)
+	else if (properties.find("--idle") != std::string::npos)
 		Idle.outlines.insert(std::pair<std::string, Outline*>(name, outline));
 	else
 		Explicit.outlines.insert(std::pair<std::string, Outline*>(name, outline));
@@ -208,7 +275,8 @@ bool ReactionServer::delete_outlines(std::string name, std::string properties) {
 		delete ans.outline;
 	ans.outline =  iter->second;
 	Explicit.outlines.erase(iter);
-	if (properties.find("--HARD") != std::string::npos) {	delete ans.outline;	}
+	if (properties.find("--hard") != std::string::npos) { delete ans.outline;	ans.outline = nullptr; }
+	if (selected.outline.name == name)	selected.outline.ptr = nullptr;
 	return true;
 }
 
@@ -218,14 +286,13 @@ bool ReactionServer::add_graphics(std::string name, std::string type, std::vecto
 	Graphic* graphic = nullptr;
 	
 	cgeneratorlist_t cgeneratorlist;
-	if (properties.find("--PAINT") != std::string::npos) {
-		cgeneratorlist = buffer_cgenerators;
-		buffer_cgenerators.clear();
+	if (properties.find("--paint") != std::string::npos) {
+		cgeneratorlist.insert(cgeneratorlist.end(), buffer_cgenerators.begin(), buffer_cgenerators.end());
 	}
 
-	auto color = graphic->getEdgeColor();
-	if (properties.find("--SET-COLOR") != std::string::npos) {
-		if (sscanf(properties.substr(properties.find("--SET-COLOR")).c_str(), "--SET-COLOR [%f,%f,%f]", &color[0], &color[1], &color[2]) == 3)
+	pencolor_t color(3, 0);
+	if (properties.find("--set-color") != std::string::npos) {
+		if (sscanf(properties.substr(properties.find("--set-color")).c_str(), "--set-color [%f,%f,%f]", &color[0], &color[1], &color[2]) == 3)
 			graphic->setEdgeColor(color);
 	}
 
@@ -242,7 +309,7 @@ bool ReactionServer::add_graphics(std::string name, std::string type, std::vecto
 
 
 	bool isEdgeVisible = true;
-	if (properties.find("--DROP-EDGE") != std::string::npos)
+	if (properties.find("--drop-edge") != std::string::npos)
 		isEdgeVisible = false;
 
 	if (isEdgeVisible)
@@ -252,7 +319,7 @@ bool ReactionServer::add_graphics(std::string name, std::string type, std::vecto
 
 	if (name.size() == 0)
 		ans.graphic = graphic;
-	else if (properties.find("--IDLE") != std::string::npos)
+	else if (properties.find("--idle") != std::string::npos)
 		Idle.graphics.insert(std::pair<std::string, Graphic*>(name, graphic));
 	else
 		Explicit.graphics.insert(std::pair<std::string, Graphic*>(name, graphic));
@@ -273,6 +340,163 @@ bool ReactionServer::delete_graphics(std::string name, std::string properties) {
 		delete ans.graphic;
 	ans.graphic = iter->second;
 	Explicit.graphics.erase(iter);
-	if (properties.find("--HARD") != std::string::npos) { delete ans.graphic; }
+	if (properties.find("--hard") != std::string::npos) { delete ans.graphic; ans.graphic = nullptr; }
+	if (selected.graphic.name == name)	selected.graphic.ptr = nullptr;
 	return true;
+}
+
+
+bool ReactionServer::select_outline(std::string name) {
+	if (Explicit.outlines.find(name) != Explicit.outlines.end()) {
+		selected.outline.ptr = Explicit.outlines.find(name)->second;
+		selected.outline.name = name;
+		selected.outline.isAns = false;
+		selected.outline.isIdle = false;
+		return true;
+	}
+	else if (Idle.outlines.find(name) != Idle.outlines.end()) {
+		selected.outline.ptr = Idle.outlines.find(name)->second;
+		selected.outline.name = name;
+		selected.outline.isAns = false;
+		selected.outline.isIdle = true;
+		return true;
+	}
+	throw std::string("Name not exists");
+}
+
+bool ReactionServer::select_graphic(std::string name) {
+	if (Explicit.graphics.find(name) != Explicit.graphics.end()) {
+		selected.graphic.ptr = Explicit.graphics.find(name)->second;
+		selected.graphic.name = name;
+		selected.graphic.isAns = false;
+		selected.graphic.isIdle = false;
+		return true;
+	}
+	else if (Idle.graphics.find(name) != Idle.graphics.end()) {
+		selected.graphic.ptr = Idle.graphics.find(name)->second;
+		selected.graphic.name = name;
+		selected.graphic.isAns = false;
+		selected.graphic.isIdle = true;
+		return true;
+	}
+	throw std::string("Name not exists");
+}
+
+bool ReactionServer::record_cgenerator(std::string type, std::vector<std::pair<int, int>> vertices, std::string properties) {
+	if (vertices.size() == 0 || type.find("together") != std::string::npos)
+		vertices.insert(vertices.end(), buffer_vertices.begin(), buffer_vertices.end());
+
+	pencolor_t color;
+	color.resize(3, 0);
+	if (properties.find("--set-color") != std::string::npos) {
+		if (sscanf(properties.substr(properties.find("--set-color")).c_str(), "--set-color [%f,%f,%f]", &color[0], &color[1], &color[2]) != 3)
+			color.resize(3, 0);
+	}
+
+	
+	auto& cg = buffer_cgenerators;
+	
+	std::for_each(vertices.begin(), vertices.end(), [&cg, &color](std::pair<int, int>& x) {
+		cg.push_back(std::pair<std::pair<int, int>, pencolor_t>(x, color)); 
+	});
+	
+
+	return true;
+}
+
+bool ReactionServer::go(std::string name, std::string properties) {
+	if (name.size() != 0)
+		select_graphic(name);
+
+	double rad = 0;
+	auto mark = properties.find("--rotate") != std::string::npos;
+	if (mark != std::string::npos) {
+		sscanf(properties.substr(mark).c_str(), "--rotate %lf", &rad);
+	}
+
+	std::pair<double, double> scale(1, 1);
+	double scalebuf[2];
+	mark = properties.find("--scale");
+	if (mark != std::string::npos) {
+		if (sscanf(properties.substr(mark).c_str(), "--scale [%lf,%lf]", &scalebuf[0], &scalebuf[1]) == 2) {
+			scale.first = scalebuf[0] > 0 ? scalebuf[0] : 1;
+			scale.second = scalebuf[1] > 0 ? scalebuf[1] : 1;
+		}
+	}
+
+	std::pair<int, int> disp(0, 0);
+	mark = properties.find("--disp");
+	if (mark != std::string::npos) {
+		if (sscanf(properties.substr(mark).c_str(), "--disp [%d,%d]", &disp.first, &disp.second) != 2) {
+			disp.first = 0;
+			disp.second = 0;
+		}
+	}
+
+	Graphic* graphic = new Polygon(Polygons().getManipulatedNewPolygon(*(static_cast<Polygon*>(selected.graphic.ptr)), disp, scale, rad));
+
+	char namebuf[32] = { 0 };
+	mark = properties.find("--save-as");
+	if (mark != std::string::npos) {
+		sscanf(properties.substr(mark).c_str(), "--save-as %s", namebuf);
+		name = namebuf;
+		if (name.size() == 0) {
+			if (ans.graphic != nullptr)	delete ans.graphic;
+			ans.graphic = graphic;
+			throw std::string("Cannot read save-as's name, save as \'ans\'");
+		}
+		if (Explicit.outlines.find(name) != Explicit.outlines.end() || Idle.outlines.find(name) != Idle.outlines.end()) {
+			if (ans.graphic != nullptr)	delete ans.graphic;
+			ans.graphic = graphic;
+			throw std::string("Name already exists, save as \'ans\'");
+		}
+		if (properties.find("--idle") != std::string::npos)
+			Idle.graphics.insert(std::pair<std::string, Graphic*>(name, graphic));
+		else
+			Explicit.graphics.insert(std::pair<std::string, Graphic*>(name, graphic));
+		return true;
+	}
+
+	mark = properties.find("--temp");
+	if (mark != std::string::npos) {
+		if (ans.graphic != nullptr)	delete ans.graphic;
+		ans.graphic = graphic;
+		return true;
+	}
+
+	if (selected.graphic.isAns) {
+		if (ans.graphic != nullptr)	delete ans.graphic;
+		ans.graphic = graphic;
+		return true;
+	}
+	else if (selected.graphic.isIdle) {
+		auto iter = Idle.graphics.find(selected.graphic.name);
+		if (iter == Idle.graphics.end())	throw std::string("consistancy leak");
+		delete iter->second;
+		iter->second = graphic;
+		selected.graphic.ptr = graphic;
+		return true;
+	}
+	else {
+		auto iter = Explicit.graphics.find(selected.graphic.name);
+		if (iter == Explicit.graphics.end())	throw std::string("consistancy leak");
+		delete iter->second;
+		iter->second = graphic;
+		selected.graphic.ptr = graphic;
+		return true;
+	}
+}
+
+bool ReactionServer::makechange_outline(std::string name, std::string properties) {
+	if (name.size() != 0)
+		select_outline(name);
+
+
+}
+
+bool ReactionServer::makechange_graphics(std::string name, std::string properties) {
+	if (name.size() != 0)
+		select_graphic(name);
+
+
 }

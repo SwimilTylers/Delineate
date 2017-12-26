@@ -16,11 +16,15 @@
 
 using namespace std;
 
-#define DEBUG true
+Window GLWindow(pair<int, int>(PAGE_WIDTH, PAGE_HEIGHT));
+GLPlayer Player(GLWindow);
 
-#if DEBUG
+#define DEBUG true
+#undef DEBUG
+
 void Display()
 {
+#if DEBUG
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.0, 0.0, 0.0);
 	static Window window(pair<int, int>(PAGE_WIDTH, PAGE_HEIGHT));
@@ -78,52 +82,14 @@ void Display()
 	Player.FillGraphic(polygon_rotate);
 	Player.FillGraphic(polygon_scale);
 	Player.FillGraphic(polygon_manip);
-	glFlush();
-}
-#elif TEST_ONE
-void Display()
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1.0, 1.0, 1.0);
-	glPointSize(10);
-
-	glBegin(GL_POINTS);
-	glVertex2d(1, 1);
-	glVertex2d(2, 2);
-	glVertex2d(3, 3);
-	glVertex2d(4, 4);
-	glVertex2d(5, 5);
-	glVertex2d(6, 6);
-	glVertex2d(7, 7);
-	glVertex2d(8, 8);
-	glVertex2d(9, 9);
-	glEnd();
-
-	glPointSize(1);
-
-	glRectd(2.2, 3.1, 12.2, 13.1);
-}
+	glutSwapBuffers();
 #else
-void TEST()
-{
-	glPointSize(10);
-	glBegin(GL_POINTS);
-
-
-	glVertex3f(0.25, 0.25, 0.0);
-	glVertex3f(0.75, 0.25, 0.0);
-	glVertex3f(0.75, 0.75, 0.0);
-	glVertex3f(0.25, 0.75, 0.0);
-	glEnd();
-
-	glFlush();
-}
-
-void Display()
-{
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.0, 0.0, 0.0);
-	TEST();
-	glFlush();
-}
+	for (auto&& outline : server.serializeOutline())
+		Player.DrawOutline(*outline);
+	for (auto&& graphic : server.serializeGraphic())
+		Player.FillGraphic(*graphic);
+	glutSwapBuffers();
 #endif
+}
