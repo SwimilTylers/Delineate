@@ -6,4 +6,4 @@ extern int PAGE_HEIGHT;
 extern int PAGE_WIDTH;
 
 void Display();
-void PromptInteraction(unsigned char key, int x, int y);
+void PromptInteraction(int key, int x, int y);

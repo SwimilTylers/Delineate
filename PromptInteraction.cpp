@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <Windows.h>
+#include <GL\glut.h>
 #include "ReactionServer.h"
 #include "ColorPrint.h"
 using namespace std;
@@ -8,7 +9,7 @@ using namespace std;
 ReactionServer server;
 extern char WorkPath[_MAX_PATH];
 
-void PromptInteraction(unsigned char key, int x, int y) {
+void PromptInteraction(int key, int x, int y) {
 	string prompt;
 	
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -18,8 +19,7 @@ void PromptInteraction(unsigned char key, int x, int y) {
 
 	switch (key)
 	{
-	case 'P':
-	case 'p':
+	case GLUT_KEY_F1:
 		SetConsoleTextAttribute(hOut,
 			FOREGROUND_RED |
 			FOREGROUND_GREEN |
@@ -45,6 +45,7 @@ void PromptInteraction(unsigned char key, int x, int y) {
 			getline(std::cin, prompt);
 			server(prompt);
 		}
+		clog << "Dialog Terminated" << endl;
 		break;
 	default:
 		break;

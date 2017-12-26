@@ -4,6 +4,7 @@
 
 Outline::Outline()
 {
+	color.resize(3, 0);
 }
 
 

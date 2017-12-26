@@ -52,6 +52,8 @@ GLPlayer::GLPlayer(const Window InitWindow)
 
 void GLPlayer::DrawOutline(Outline& outline)
 {
+	auto color = outline.getColor();
+	glColor3f(color[0], color[1], color[2]);
 	glBegin(GL_POINTS);
 	for (const pair<int,int> element : outline.Vertices(WindowNow))
 	{
