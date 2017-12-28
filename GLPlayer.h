@@ -10,6 +10,7 @@ class GLPlayer
 {
 public:
 	GLPlayer(Window InitWindow);
+	void TextWords(std::string name, std::pair<int, int> position);
 	void DrawOutline(Outline &outline);
 	void FillGraphic(Graphic &graphic);
 	Window& getWindow();

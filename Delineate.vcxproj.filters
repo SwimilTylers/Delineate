@@ -114,6 +114,12 @@
     <ClInclude Include="ColorPrint.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MouseClickServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Delegate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLPlayer.cpp">
@@ -195,6 +201,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Display.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseClickServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Delegate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

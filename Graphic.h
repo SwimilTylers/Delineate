@@ -37,6 +37,7 @@ public:
 
 	void TurnOnEdgeVision() { visible_edge = true; }
 	void TurnOffEdgeVision() { visible_edge = false; }
+	bool EdgeVision() const { return visible_edge; }
 
 	cgeneratorlist_t getCGenerators() const { return CGenerators; }
 	void setCGenerators(const cgeneratorlist_t cgenerators) { CGenerators = cgenerators; }

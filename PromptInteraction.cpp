@@ -8,20 +8,18 @@ using namespace std;
 
 ReactionServer server;
 extern char WorkPath[_MAX_PATH];
+extern HANDLE hOut, hIn;
 
 void PromptInteraction(int key, int x, int y) {
-	string prompt;
 	
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+	string prompt;
 
 	server.DisableIsReady();
 
 	switch (key)
 	{
-	case GLUT_KEY_F1:
+	case GLUT_KEY_INSERT:
 		SetConsoleTextAttribute(hOut,
-			FOREGROUND_RED |
 			FOREGROUND_GREEN |
 			FOREGROUND_BLUE |
 			FOREGROUND_INTENSITY);
@@ -41,7 +39,7 @@ void PromptInteraction(int key, int x, int y) {
 			FOREGROUND_BLUE |
 			FOREGROUND_INTENSITY);
 		while (!server.isReadyToExport()) {
-			cout << ">";
+			cout << ">: ";
 			getline(std::cin, prompt);
 			server(prompt);
 		}

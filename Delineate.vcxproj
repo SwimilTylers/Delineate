@@ -142,6 +142,7 @@
     <ClInclude Include="CGeneratorBarrier.h" />
     <ClInclude Include="CircleRim.h" />
     <ClInclude Include="ColorPrint.h" />
+    <ClInclude Include="Delegate.h" />
     <ClInclude Include="EllipseRim.h" />
     <ClInclude Include="GeometricCircle.h" />
     <ClInclude Include="GeometricEllipse.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="Liang_Barsky_Algorithm.h" />
     <ClInclude Include="LineCutAlgorithm.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MouseClickServer.h" />
     <ClInclude Include="Outline.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="PolygonCutAlgorithm.h" />
@@ -168,6 +170,7 @@
   <ItemGroup>
     <ClCompile Include="CGeneratorBarrier.cpp" />
     <ClCompile Include="CircleRim.cpp" />
+    <ClCompile Include="Delegate.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="EllipseRim.cpp" />
     <ClCompile Include="GeometricCircle.cpp" />
@@ -181,6 +184,7 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MouseAcvtiveMove.cpp" />
     <ClCompile Include="MouseClick.cpp" />
+    <ClCompile Include="MouseClickServer.cpp" />
     <ClCompile Include="Outline.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="PolygonCutAlgorithm.cpp" />

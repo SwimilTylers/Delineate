@@ -7,6 +7,7 @@
 #include <cassert>
 #include <string>
 #include <stack>
+#include <Windows.h>
 using namespace std;
 
 #define FLOAT_PRINT true
@@ -45,10 +46,32 @@ inline int QuickFind(vector<CGeneratorBarrier*>& this_line, pair<int,int>& CGene
 }
 
 
+inline void drawString(const char* str) {
+	static int isFirstCall = 1;
+	static GLuint lists;
+
+	if (isFirstCall) {
+		isFirstCall = 0;
+		lists = glGenLists(128);
+		wglUseFontBitmaps(wglGetCurrentDC(), 0, 128, lists);
+	}
+	for (; *str != '\0'; ++str)
+		glCallList(lists + *str);
+}
+
+
 GLPlayer::GLPlayer(const Window InitWindow)
 : WindowNow(InitWindow)
 {
 }
+
+
+void GLPlayer::TextWords(std::string name, std::pair<int, int> position) {
+	glRasterPos2f(float(position.first) / WindowNow.getWindowSize().first - 1,
+		float(position.second) / WindowNow.getWindowSize().second - 1);
+	drawString(name.c_str());
+}
+
 
 void GLPlayer::DrawOutline(Outline& outline)
 {
@@ -68,6 +91,7 @@ void GLPlayer::FillGraphic(Graphic& graphic)
 	{
 		for (auto CGenerator : graphic.getCGenerators())
 		{
+			if (!graphic.getUttermost().isIn(CGenerator.first))	continue;
 			glColor3f(CGenerator.second[0], CGenerator.second[1], CGenerator.second[2]);
 			glBegin(GL_POINTS);
 			auto&& buf = CGenerationKernel(CGenerator.first, graphic.getRangeY().first, 

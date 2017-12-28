@@ -86,6 +86,12 @@ void Display()
 #else
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.0, 0.0, 0.0);
+
+	for (auto&& text : clickserver.TextifyButtom())
+		Player.TextWords(text.first, text.second);
+
+	for (auto&& buttom : clickserver.VisualizeButtom())
+		Player.FillGraphic(*buttom);
 	for (auto&& outline : server.serializeOutline())
 		Player.DrawOutline(*outline);
 	for (auto&& graphic : server.serializeGraphic())

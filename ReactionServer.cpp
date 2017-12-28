@@ -76,6 +76,9 @@ void ReactionServer::operator()(std::string prompt) {
 		if (ans.graphic != nullptr)	delete ans.graphic;
 		if (ans.CutWindow != nullptr) delete ans.CutWindow;
 
+		if (selected.graphic.isAns)	selected.graphic.ptr = nullptr;
+		if (selected.outline.isAns)	selected.outline.ptr = nullptr;
+
 		ans.outline = nullptr;
 		ans.graphic = nullptr;
 		ans.CutWindow = nullptr;
@@ -104,6 +107,20 @@ void ReactionServer::operator()(std::string prompt) {
 		else if (PROMPT_CMD("export now")) {
 			isReady = true;
 		}
+		else if (PROMPT_CMD("export trash Explicit")) {
+			Explicit.outlines.clear();
+			Explicit.graphics.clear();
+
+			if(!selected.graphic.isAns && !selected.graphic.isIdle)	selected.graphic.ptr = nullptr;
+			if (!selected.outline.isAns && !selected.outline.isIdle) selected.outline.ptr = nullptr;
+		}
+		else if (PROMPT_CMD("export trash Explicit")) {
+			Idle.outlines.clear();
+			Idle.graphics.clear();
+
+			if (selected.graphic.isIdle)	selected.graphic.ptr = nullptr;
+			if (selected.outline.isIdle) selected.outline.ptr = nullptr;
+		}
 		else if (PROMPT_CMD("export trash outline"))
 			delete_graphics(name, properties);
 		else if (PROMPT_CMD("export trash graphic"))
@@ -128,6 +145,23 @@ void ReactionServer::operator()(std::string prompt) {
 		else if (PROMPT_CMD("record cgs"))
 			record_cgenerator(type, vertices, properties);
 
+		// go: rotate, rescale or move a graphic
+		else if (PROMPT_CMD("let's go"))
+			go(name, properties);
+
+		// makechange
+		else if (PROMPT_CMD("makechange outline"))
+			makechange_outline(name, properties);
+		else if (PROMPT_CMD("makechange graphic"))
+			makechange_graphics(name, properties);
+
+		// ILLEGAL COMMANDS
+		else {
+			std::cerr << "[!] Illegal Commands" << std::endl;
+			std::cerr << "[!] @pre-option has already worked, while post-option# and cmd is denied" << std::endl;
+			std::cerr << "[!] This feature is not safe, send prompt cmd \'at ease @pre-option-lock=1\' to ban pre-option excluding \'at ease\'" << std::endl;
+			return;
+		}
 	}
 	catch (std::string ex) {
 		std::cerr << ex << std::endl;
@@ -145,6 +179,9 @@ void ReactionServer::operator()(std::string prompt) {
 		if (ans.outline != nullptr)	delete ans.outline;
 		if (ans.graphic != nullptr)	delete ans.graphic;
 		if (ans.CutWindow != nullptr) delete ans.CutWindow;
+
+		if (selected.graphic.isAns)	selected.graphic.ptr = nullptr;
+		if (selected.outline.isAns)	selected.outline.ptr = nullptr;
 
 		ans.outline = nullptr;
 		ans.graphic = nullptr;
@@ -252,12 +289,33 @@ bool ReactionServer::add_outlines(std::string name, std::string type, std::vecto
 			outline->setColor(color);
 	}
 
-	if (name.size() == 0)
+	if (name.size() == 0) {
+		if (properties.find("--focus") != std::string::npos) {
+			selected.outline.ptr = outline;
+			selected.outline.isAns = true;
+			selected.outline.isIdle = false;
+			selected.outline.name = std::string();
+		}
 		ans.outline = outline;
-	else if (properties.find("--idle") != std::string::npos)
+	}
+	else if (properties.find("--idle") != std::string::npos) {
 		Idle.outlines.insert(std::pair<std::string, Outline*>(name, outline));
-	else
+		if (properties.find("--focus") != std::string::npos) {
+			selected.outline.ptr = outline;
+			selected.outline.isAns = false;
+			selected.outline.isIdle = true;
+			selected.outline.name = name;
+		}
+	}
+	else {
 		Explicit.outlines.insert(std::pair<std::string, Outline*>(name, outline));
+		if (properties.find("--focus") != std::string::npos) {
+			selected.outline.ptr = outline;
+			selected.outline.isAns = false;
+			selected.outline.isIdle = false;
+			selected.outline.name = name;
+		}
+	}
 	return true;
 }
 
@@ -409,7 +467,7 @@ bool ReactionServer::go(std::string name, std::string properties) {
 		select_graphic(name);
 
 	double rad = 0;
-	auto mark = properties.find("--rotate") != std::string::npos;
+	auto mark = properties.find("--rotate");
 	if (mark != std::string::npos) {
 		sscanf(properties.substr(mark).c_str(), "--rotate %lf", &rad);
 	}
@@ -434,6 +492,9 @@ bool ReactionServer::go(std::string name, std::string properties) {
 	}
 
 	Graphic* graphic = new Polygon(Polygons().getManipulatedNewPolygon(*(static_cast<Polygon*>(selected.graphic.ptr)), disp, scale, rad));
+	if (selected.graphic.ptr->EdgeVision())
+		graphic->TurnOnEdgeVision();
+	else graphic->TurnOffEdgeVision();
 
 	char namebuf[32] = { 0 };
 	mark = properties.find("--save-as");
@@ -491,12 +552,100 @@ bool ReactionServer::makechange_outline(std::string name, std::string properties
 	if (name.size() != 0)
 		select_outline(name);
 
+	pencolor_t color(3, 0);
+	auto mark = properties.find("--set-color");
+	if (mark != std::string::npos) {
+		if (properties.find("--set-color default"), mark, sizeof("--set-color default")) {
+			selected.outline.ptr->setColor(color);
+		}
+		if (sscanf(properties.substr(mark).c_str(), "--set-color [%f,%f,%f]", &color[0], &color[1], &color[2]) == 3)
+			selected.outline.ptr->setColor(color);
+	}
 
+	if (properties.find("--explicit") != std::string::npos && (selected.outline.isIdle || selected.outline.isAns)) {
+		selected.outline.isIdle = false;
+		selected.outline.isAns = false;
+		Explicit.outlines.insert(std::pair<std::string, Outline*>(selected.outline.name, selected.outline.ptr));
+		if (selected.outline.isAns) {
+			selected.outline.isAns = false;
+			ans.outline = nullptr;
+		}
+		else {
+			Idle.outlines.erase(selected.outline.name);
+		}
+	}
+	else if (properties.find("--idle") != std::string::npos && !selected.outline.isIdle) {
+		selected.outline.isIdle = true;
+		Idle.outlines.insert(std::pair<std::string, Outline*>(selected.outline.name, selected.outline.ptr));
+		if (selected.outline.isAns) {
+			selected.outline.isAns = false;
+			ans.outline = nullptr;
+		}
+		else {
+			Explicit.outlines.erase(selected.outline.name);
+		}
+	}
+
+	return true;
 }
 
 bool ReactionServer::makechange_graphics(std::string name, std::string properties) {
 	if (name.size() != 0)
 		select_graphic(name);
 
+	auto mark = properties.find("--paint");
+	if (mark != std::string::npos) {
+		if (properties.find("--paint app"), mark, sizeof("--paint app")) {
+			auto cgeneratorlist = selected.graphic.ptr->getCGenerators();
+			cgeneratorlist.insert(cgeneratorlist.end(), buffer_cgenerators.begin(), buffer_cgenerators.end());
+			selected.graphic.ptr->setCGenerators(cgeneratorlist);
+		}
+		else if (properties.find("--paint default"), mark , sizeof("--paint default")) {
+			cgeneratorlist_t cgeneratorlist;
+			selected.graphic.ptr->setCGenerators(cgeneratorlist);
+		}
+		else if (properties.find("--paint replace"), mark, sizeof("--paint replace")) {
+			selected.graphic.ptr->setCGenerators(buffer_cgenerators);
+		}
+	}
 
+	pencolor_t color(3, 0);
+	mark = properties.find("--set-color");
+	if (mark != std::string::npos) {
+		if (properties.find("--set-color default"), mark, sizeof("--set-color default")) {
+			selected.graphic.ptr->setEdgeColor(color);
+		}
+		if (sscanf(properties.substr(mark).c_str(), "--set-color [%f,%f,%f]", &color[0], &color[1], &color[2]) == 3)
+			selected.graphic.ptr->setEdgeColor(color);
+	}
+
+	if (properties.find("--set-edge") != std::string::npos)
+		selected.graphic.ptr->TurnOnEdgeVision();
+	else if (properties.find("--drop-edge") != std::string::npos)
+		selected.graphic.ptr->TurnOffEdgeVision();
+
+	if (properties.find("--explicit") != std::string::npos && (selected.graphic.isIdle || selected.graphic.isAns)) {
+		selected.graphic.isIdle = false;
+		selected.graphic.isAns = false;
+		Explicit.graphics.insert(std::pair<std::string, Graphic*>(selected.graphic.name, selected.graphic.ptr));
+		if (selected.graphic.isAns) {
+			selected.graphic.isAns = false;
+			ans.graphic = nullptr;
+		}
+		else {
+			Idle.graphics.erase(selected.graphic.name);
+		}
+	}else if (properties.find("--idle") != std::string::npos && !selected.graphic.isIdle) {
+		selected.graphic.isIdle = true;
+		Idle.graphics.insert(std::pair<std::string, Graphic*>(selected.graphic.name, selected.graphic.ptr));
+		if (selected.graphic.isAns) {
+			selected.graphic.isAns = false;
+			ans.graphic = nullptr;
+		}
+		else {
+			Explicit.graphics.erase(selected.graphic.name);
+		}
+	}
+
+	return true;
 }

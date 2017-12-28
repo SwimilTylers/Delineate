@@ -7,8 +7,11 @@
 using namespace std;
 
 int PAGE_HEIGHT = 800;
-int PAGE_WIDTH = 1000;
+int PAGE_WIDTH = 1800;
+int DIALOG_HEIGHT = 8;
+int DIALOG_WIDTH = 120;
 char WorkPath[_MAX_PATH];
+HANDLE hOut, hIn;
 
 inline void TcharToChar(const TCHAR * tchar, char * _char)
 {
@@ -32,6 +35,19 @@ void setConsole() {
 	TCHAR Name[255];
 	CharToTchar("Whisper", Name);
 	SetConsoleTitle(Name);
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	hIn = GetStdHandle(STD_INPUT_HANDLE);
+
+	clog << "Welcome! [Whisper is a prompt cmd window, type\n \'at ease immediate#\' or \'export now\' \nto invoke GUI. You can re-enter this window by press \'INSERT\' key" << endl;
+}
+
+void resetConsole() {
+	COORD size = { DIALOG_WIDTH, DIALOG_HEIGHT };
+	SetConsoleScreenBufferSize(hOut, size);
+	SMALL_RECT rc = { 0,0, DIALOG_WIDTH - 1, DIALOG_HEIGHT - 1 };
+	SetConsoleWindowInfo(hOut, true, &rc);
+	MoveWindow(GetConsoleWindow(), 0, PAGE_HEIGHT + 40, PAGE_WIDTH + 15, PAGE_HEIGHT / 4, true);
 }
 
 void setGlut() {
@@ -41,6 +57,7 @@ void setGlut() {
 	glutCreateWindow("Delineate");
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glutSpecialFunc(PromptInteraction);
+	glutMouseFunc(MouseClick);
 	glutDisplayFunc(Display);
 }
 
@@ -51,8 +68,10 @@ int main(int argc, char** argv)
 
 	setConsole();
 
-	PromptInteraction(GLUT_KEY_F1, 0, 0);
+	PromptInteraction(GLUT_KEY_INSERT, 0, 0);
 
+
+	resetConsole();
 	glutMainLoop();
 	return 0;
 }
