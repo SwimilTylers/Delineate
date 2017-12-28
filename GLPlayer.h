@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "CGeneratorBarrier.h"
 #include <vector>
+#include "Typedef.h"
 
 class Graphic;
 class Outline;
@@ -25,5 +26,8 @@ private:
 
 	static std::vector<std::pair<int, int>> CGenerationRecursionStartPoint(std::vector<CGeneratorBarrier*>& StartLine, 
 		std::pair<int, int>& ClosedRange, int CommonY);
+
+	static std::vector<std::vector<std::pair<int, int>>> GLPlayer::scan_paint(std::vector<std::vector<CGeneratorBarrier*>>& CGeneratorList, const int baseY);
+
 };
 

@@ -1,9 +1,13 @@
 #include <GL/glut.h>
 #include <iostream>
+#include <Windows.h>
+#include <GL\glut.h>
 #include "Reaction.h"
 
 Delegate delegater;
 MouseClickServer clickserver(&delegater);
+extern char WorkPath[_MAX_PATH];
+extern HANDLE hOut, hIn;
 
 void MouseClick(int button, int state, int x, int y)
 {
@@ -26,11 +30,41 @@ void MouseClick(int button, int state, int x, int y)
 
 	
 	if (delegater.ifReadyPrompt()) {
-		auto prompt = delegater.sendPrompt();
-		std::clog << prompt << std::endl;
-		server(prompt);
-		if (server.isReadyToExport())	Display();
+		auto&& cmdset = delegater.sendPrompt();
+		for each (auto&& prompt in cmdset)
+		{
+			std::clog << prompt << std::endl;
+			server(prompt);
+			if (server.isReadyToExport())	Display();
+		}
 	}
-	else if (delegater.ifAwakeKeyborad())
-		PromptInteraction(GLUT_KEY_INSERT, 0, 0);
+	else if (delegater.ifAwakeKeyborad()) {
+		std::string prompt;
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
+		std::cout << "Delineate Control Prompt ";
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_INTENSITY);
+		std::cout << "@";
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_INTENSITY);
+		std::cout << WorkPath << std::endl;
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
+		while (!server.isReadyToExport()) {
+			std::cout << ">: ";
+			getline(std::cin, prompt);
+			server(prompt);
+		}
+		std::clog << "Dialog Terminated" << std::endl;
+		Display();
+	}
 }

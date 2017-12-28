@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 
 	setConsole();
 
-	PromptInteraction(GLUT_KEY_INSERT, 0, 0);
+//	PromptInteraction(GLUT_KEY_INSERT, 0, 0);
 
 
 	resetConsole();

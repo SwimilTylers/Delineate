@@ -90,4 +90,7 @@ private:
 
 	bool makechange_outline(std::string name, std::string properties);
 	bool makechange_graphics(std::string name, std::string properties);
+
+	bool store_outline(std::string name, std::string properties);
+	bool store_graphic(std::string name, std::string properties);
 };
