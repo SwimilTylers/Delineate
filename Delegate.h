@@ -143,5 +143,7 @@ private:
 	void rotate(bool isDown, std::pair<int, int> coord);
 	void scale(bool, std::pair<int, int>);
 	void move(bool, std::pair<int, int>);
+
+	void cut(bool isDown, std::pair<int, int> coord);
 };
 

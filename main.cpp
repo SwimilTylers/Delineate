@@ -56,8 +56,8 @@ void setGlut() {
 	glutInitWindowPosition(0, 0); 
 	glutCreateWindow("Delineate");
 	glClearColor(1.0, 1.0, 1.0, 1.0);
-//	glutSpecialFunc(PromptInteraction);
-//	glutMouseFunc(MouseClick);
+	glutSpecialFunc(PromptInteraction);
+	glutMouseFunc(MouseClick);
 	glutDisplayFunc(Display);
 }
 

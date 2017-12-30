@@ -81,7 +81,7 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 		routine = (SERVICE)(&Delegate::polygon);
 	}
 
-	// rotate, move, scale
+	// rotate, move, scale, cut
 	else if (Reaction == reaction::Buttom::ROTATE) {
 		routine = (SERVICE)(&Delegate::rotate);
 	}
@@ -90,6 +90,9 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 	}
 	else if (Reaction == reaction::Buttom::SCALE) {
 		routine = (SERVICE)(&Delegate::scale);
+	}
+	else if (Reaction == reaction::Buttom::CUT) {
+		routine = (SERVICE)(&Delegate::cut);
 	}
 
 	// depaint/paint
@@ -110,7 +113,7 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 	else if (Reaction == reaction::Buttom::CLOSEEDGE) {
 		isOpenEdge = false;
 		isCloseEdge = true;
-	}
+	}	
 
 	// colors:
 	else if (Reaction == reaction::Buttom::BLACK) {
@@ -567,6 +570,47 @@ void Delegate::rotate(bool isDown, std::pair<int, int> coord) {
 
 		foci[0].second->rotate(rad);
 
+		isReadyPrompt = true;
+		vertices.clear();
+	}
+}
+
+
+void Delegate::cut(bool isDown, std::pair<int, int> coord) {
+	if (isDown)	vertices.push_back(coord);
+	if (coord.first < 150) vertices.clear();
+	else if (!isDown && vertices.size() == 1) {
+		if (abs(vertices[0].first - coord.first) + abs(vertices[0].second - coord.second) < 30) {
+			vertices.clear();
+			isReadyPrompt = false;
+			return;
+		}
+
+		prompt_set.clear();
+		std::string _prompt = "get rid of clear-select# immediate#";
+
+		std::pair<int, int> left_down, right_up;
+
+		left_down.first = vertices[0].first < coord.first ? vertices[0].first : coord.first;
+		left_down.second = vertices[0].second < coord.second ? vertices[0].second : coord.second;
+
+		right_up.first = vertices[0].first > coord.first ? vertices[0].first : coord.first;
+		right_up.second = vertices[0].second > coord.second ? vertices[0].second : coord.second;
+
+		std::string V(" -v");
+		char buf[32];
+		sprintf(buf, " [%d,%d]", vertices[0].first, vertices[0].second);
+		V += buf;
+		sprintf(buf, " [%d,%d]", coord.first, coord.second);
+		V += buf;
+		V += " $";
+
+		_prompt += V;
+		prompt_set.push_back(_prompt);
+
+		for each (auto&& var in foci) { delete var.second; }
+		foci.clear();
+		
 		isReadyPrompt = true;
 		vertices.clear();
 	}

@@ -8,6 +8,10 @@
 #include "Graphic.h"
 #include "Polygon.h"
 #include "Typedef.h"
+#include "LineCutAlgorithm.h"
+#include "Liang_Barsky_Algorithm.h"
+#include "PolygonCutAlgorithm.h"
+#include "Weiler_Atherton_Algorithm.h"
 #include <cassert>
 #include <iostream>
 #include <algorithm>
@@ -16,6 +20,8 @@
 
 ReactionServer::ReactionServer()
 {
+	LineCutAlgorithm* line_cut_server = new Liang_Barsky_Algorithm();
+	PolygonCutAlgorithm* polygon_rim_cut_server = new Weiler_Atherton_Algorithm();
 }
 
 
@@ -149,6 +155,10 @@ void ReactionServer::operator()(std::string prompt) {
 		// go: rotate, rescale or move a graphic
 		else if (PROMPT_CMD("let's go"))
 			go(name, properties);
+
+		// rid: cut
+		else if (PROMPT_CMD("get rid of"))
+			rid(vertices);
 
 		// makechange
 		else if (PROMPT_CMD("makechange outline"))
@@ -590,6 +600,32 @@ bool ReactionServer::go(std::string name, std::string properties) {
 		selected.graphic.ptr = graphic;
 		return true;
 	}
+}
+
+bool ReactionServer::rid(std::vector<std::pair<int, int>> vertices) {
+	if (selected.graphic.ptr == nullptr)	throw std::string("not selected");
+	if (vertices.size() != 2)	throw std::string("need exactly two points(left-down & right-up) to determine a cut");
+	if (selected.graphic.isAns || selected.graphic.isIdle)	throw std::string("Cut operation is only prepared for selected Explicit target");
+	RectangleWindowRim cutRim(vertices[0], vertices[1], new Liang_Barsky_Algorithm(), new Weiler_Atherton_Algorithm());
+	auto&& graphics = Polygons().getCutNewPolygon(*static_cast<Polygon*>(selected.graphic.ptr), cutRim);
+
+	char name_buf[64] = { 0 };
+	Graphic* ptr = nullptr;
+
+	for (size_t i = 0; i < graphics.size(); i++)
+	{
+		sprintf(name_buf, "%s-%03d", selected.graphic.name.c_str(), i);
+		ptr = new Polygon(graphics[i]);
+		Explicit.graphics.insert(std::pair<std::string, Graphic*>(name_buf, ptr));
+	}
+
+	Explicit.graphics.erase(selected.graphic.name);
+	delete selected.graphic.ptr;
+
+	selected.graphic.ptr = ptr;
+	selected.graphic.name = name_buf;
+
+	return true;
 }
 
 bool ReactionServer::makechange_outline(std::string name, std::string properties) {

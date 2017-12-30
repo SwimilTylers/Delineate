@@ -41,6 +41,9 @@ private:
 	std::vector<std::pair<int, int>> buffer_vertices;
 	cgeneratorlist_t buffer_cgenerators;
 
+	LineCutAlgorithm* line_cut_server;
+	PolygonCutAlgorithm* polygon_rim_cut_server;
+
 	struct {
 		Outline* outline = nullptr;
 		Graphic* graphic = nullptr;
@@ -87,6 +90,7 @@ private:
 	bool record_cgenerator(std::string type, std::vector<std::pair<int, int>> vertices, std::string properties);
 
 	bool go(std::string name, std::string properties);
+	bool rid(std::vector<std::pair<int, int>> vertices);
 
 	bool makechange_outline(std::string name, std::string properties);
 	bool makechange_graphics(std::string name, std::string properties);

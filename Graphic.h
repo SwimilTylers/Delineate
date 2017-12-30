@@ -34,6 +34,9 @@ public:
 
 	virtual std::pair<int, int>& getRangeY() = 0;
 	virtual const Outline& getAccessToRim() const;
+	virtual Outline* getAccessToRim_ptr() {
+		return Rim.profile;
+	}
 
 	void TurnOnEdgeVision() { visible_edge = true; }
 	void TurnOffEdgeVision() { visible_edge = false; }

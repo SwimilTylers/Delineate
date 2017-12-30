@@ -1,22 +1,6 @@
-﻿  ButtomServer.cpp
+﻿  Delegate.cpp
 e:\computer graphics\delineate\delineate\geometricline.h(25): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\computer graphics\delineate\delineate\geometricline.h(37): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\computer graphics\delineate\delineate\delegate.h(83): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
 e:\computer graphics\delineate\delineate\delegate.h(86): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\buttomserver.cpp(31): warning C4018: “<”: 有符号/无符号不匹配
-  MouseClick.cpp
-  正在生成代码...
-  正在编译...
-  PromptInteraction.cpp
-  main.cpp
-e:\computer graphics\delineate\delineate\main.cpp(46): warning C4838: 从“int”转换到“SHORT”需要收缩转换
-e:\computer graphics\delineate\delineate\main.cpp(48): warning C4838: 从“int”转换到“SHORT”需要收缩转换
-  Display.cpp
-e:\computer graphics\delineate\delineate\display.cpp(90): warning C4018: “<”: 有符号/无符号不匹配
-  Delegate.cpp
-e:\computer graphics\delineate\delineate\geometricline.h(25): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\geometricline.h(37): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\delegate.h(83): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-e:\computer graphics\delineate\delineate\delegate.h(86): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-  正在生成代码...
   Delineate.vcxproj -> E:\Computer Graphics\Delineate\Debug\Delineate.exe

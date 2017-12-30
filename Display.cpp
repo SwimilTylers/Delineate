@@ -22,7 +22,7 @@ Window GLWindow(pair<int, int>(PAGE_WIDTH, PAGE_HEIGHT));
 GLPlayer Player(GLWindow);
 
 #define DEBUG true
-//#undef DEBUG
+#undef DEBUG
 
 void Display()
 {
