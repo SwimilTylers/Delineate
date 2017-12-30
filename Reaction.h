@@ -1,11 +1,11 @@
 #pragma once
 #include "ReactionServer.h"
-#include "MouseClickServer.h"
+#include "ButtomServer.h"
 #include "Delegate.h"
 #include "GLPlayer.h"
 
 extern ReactionServer server;
-extern MouseClickServer clickserver;
+extern ButtomServer clickserver;
 extern Delegate delegater;
 extern GLPlayer Player;
 extern int PAGE_HEIGHT;

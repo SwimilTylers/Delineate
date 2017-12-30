@@ -152,7 +152,7 @@
     <ClInclude Include="Liang_Barsky_Algorithm.h" />
     <ClInclude Include="LineCutAlgorithm.h" />
     <ClInclude Include="Matrix.h" />
-    <ClInclude Include="MouseClickServer.h" />
+    <ClInclude Include="ButtomServer.h" />
     <ClInclude Include="Outline.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="PolygonCutAlgorithm.h" />
@@ -184,7 +184,7 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MouseAcvtiveMove.cpp" />
     <ClCompile Include="MouseClick.cpp" />
-    <ClCompile Include="MouseClickServer.cpp" />
+    <ClCompile Include="ButtomServer.cpp" />
     <ClCompile Include="Outline.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="PolygonCutAlgorithm.cpp" />

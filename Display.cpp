@@ -13,6 +13,8 @@
 #include "Polygon.h"
 #include "Typedef.h"
 #include "Reaction.h"
+#include "Liang_Barsky_Algorithm.h"
+#include "Weiler_Atherton_Algorithm.h"
 
 using namespace std;
 
@@ -20,7 +22,7 @@ Window GLWindow(pair<int, int>(PAGE_WIDTH, PAGE_HEIGHT));
 GLPlayer Player(GLWindow);
 
 #define DEBUG true
-#undef DEBUG
+//#undef DEBUG
 
 void Display()
 {
@@ -41,7 +43,7 @@ void Display()
 	static EllipseRim ellipse_rim(geometric_ellipse);
 	static RectangleRim rectangle_rim(pair<int, int>(1100, 400), pair<int, int>(1800, 1400));
 	static RectangleRim colorful_rectangle_rim(pair<int, int>(100, 400), pair<int, int>(300, 800));
-	static RectangleWindowRim rectangle_window_rim(pair<int, int>(200, 400), pair<int, int>(1100, 800), nullptr, nullptr);
+	static RectangleWindowRim rectangle_window_rim(pair<int, int>(650, 300), pair<int, int>(750, 400), new Liang_Barsky_Algorithm(), new Weiler_Atherton_Algorithm());
 	static pencolor_t pencolor(3);
 	pencolor[0] = 0.1;
 	pencolor[1] = 0.6;
@@ -68,20 +70,25 @@ void Display()
 	static Polygon polygon_rotate = Polygons().getRotatedNewPolygon(polygon, 0.3);
 	static Polygon polygon_scale = Polygons().getScaledNewPolygon(polygon, pair<double, double>(0.5, 0.5));
 	static Polygon polygon_manip = Polygons().getManipulatedNewPolygon(polygon, pair<int, int>(500, 500), pair<double, double>(1.2, 0.8), 0.4);
+//	static std::vector<PolygonRim> polygon_rim_aftercut = rectangle_window_rim.PolygonCut(rectangle_rim);
+	static auto polygon_aftercut = Polygons().getCutNewPolygon(polygon, rectangle_window_rim);
 	Player.DrawOutline(line);
 	Player.DrawOutline(line_2);
 	Player.DrawOutline(line_3);
 	Player.DrawOutline(circle_rim);
 	Player.DrawOutline(ellipse_rim);
-	Player.DrawOutline(rectangle_rim);
-	Player.DrawOutline(rectangle_window_rim);
+//	Player.DrawOutline(rectangle_rim);
+//	Player.DrawOutline(rectangle_window_rim);
 	Player.FillGraphic(rectangle);
-	//	Player.FillGraphic(polygon);
-	Player.DrawOutline(polygon_sketchout);
-	Player.FillGraphic(polygon_disp);
-	Player.FillGraphic(polygon_rotate);
-	Player.FillGraphic(polygon_scale);
-	Player.FillGraphic(polygon_manip);
+//	Player.FillGraphic(polygon);
+//	for (int i = 0; i < polygon_rim_aftercut.size(); ++i)
+//		Player.DrawOutline(polygon_rim_aftercut[i]);
+//	Player.FillGraphic(polygon_disp);
+//	Player.FillGraphic(polygon_rotate);
+//	Player.FillGraphic(polygon_scale);
+//	Player.FillGraphic(polygon_manip);
+	for (int i = 0; i < polygon_aftercut.size(); ++i)
+		Player.FillGraphic(polygon_aftercut[i]);
 	glutSwapBuffers();
 #else
 	glClear(GL_COLOR_BUFFER_BIT);

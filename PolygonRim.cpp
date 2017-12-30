@@ -10,13 +10,10 @@ PolygonRim::PolygonRim(std::vector<std::pair<std::pair<int, int>, std::pair<int,
 		const StraightLine new_edge(dscp);
 		edges.push_back(new_edge);
 		vertices.push_back(element.first);
-		vertices.push_back(element.second);
 
 		OELBackups.ScanBacketStack.push_back(new_edge.getScanBucket());
 		OELBackups.CorrespondingGradients.push_back(new_edge.getGradient());
 	}
-	std::sort(vertices.begin(), vertices.end());
-	vertices.erase(std::unique(vertices.begin(), vertices.end()), vertices.end());
 }
 
 PolygonRim::~PolygonRim()

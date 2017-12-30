@@ -1,7 +1,24 @@
 #include "Weiler_Atherton_Algorithm.h"
 #include <deque>
 #include "Liang_Barsky_Algorithm.h"
+#include "Delegate.h"
 #include <cassert>
+
+inline bool polygon_validation_check(std::vector<std::pair<int, int>>& vtx) {
+	int min_x = 0x7fffffff, min_y = 0x7fffffff;
+	int max_x = 0x80000000, max_y = 0x80000000;
+
+	for each (auto&& point in vtx)
+	{
+		min_x = min_x < point.first ? min_x : point.first;
+		max_x = max_x > point.first ? max_x : point.first;
+
+		min_y = min_y < point.second ? min_y : point.second;
+		max_y = max_y > point.second ? max_y : point.second;
+	}
+
+	return min_x != max_x && min_y != max_y;
+}
 
 Weiler_Atherton_Algorithm::Weiler_Atherton_Algorithm()
 {
@@ -20,7 +37,8 @@ std::vector<PolygonRim> Weiler_Atherton_Algorithm::PolygonCutKernel(const Polygo
 	std::vector<std::pair<int, int>> ret_point;
 	std::vector<PolygonRim> ret;
 	int start_iter = 0;
-	for (; start_iter < Cutv.size() && Cutv.at(start_iter).first == rect::CROSSPOINT::IN; ++start_iter);
+	for (; start_iter < Cutv.size() && Cutv.at(start_iter).first != rect::CROSSPOINT::IN; ++start_iter);
+	if (start_iter == Cutv.size())	return ret;
 	while (start_iter < Cutv.size())
 	{
 		int first_in = start_iter;
@@ -53,7 +71,8 @@ std::vector<PolygonRim> Weiler_Atherton_Algorithm::PolygonCutKernel(const Polygo
 					break;
 			}
 			assert(s_first_in != s_first_out && Winv.at(s_first_in).first == rect::CROSSPOINT::IN);
-			Winv.at(s_first_in).first == rect::CROSSPOINT::ET_CETERA;
+			ret_point.pop_back();
+			Winv.at(s_first_in).first = rect::CROSSPOINT::ET_CETERA;
 			for (first_in = 0; first_in < Cutv.size(); ++first_in)
 			{
 				if (Cutv.at(first_in).first == rect::CROSSPOINT::IN)
@@ -61,11 +80,12 @@ std::vector<PolygonRim> Weiler_Atherton_Algorithm::PolygonCutKernel(const Polygo
 						break;
 			}
 			assert(Cutv.at(first_in).first == rect::CROSSPOINT::IN && Cutv[first_in].second == Winv[s_first_in].second);
-			Cutv.at(first_in).first == rect::CROSSPOINT::ET_CETERA;	// neutralize visited node
+			Cutv.at(first_in).first = rect::CROSSPOINT::ET_CETERA;	// neutralize visited node
 		} while (first_in != start_iter);
-		ret.push_back(PolygonRims().getNewRim(ret_point));
+		if(polygon_validation_check(ret_point))
+			ret.push_back(PolygonRims().getNewRim(ret_point));
 		ret_point.clear();
-		for (; start_iter < Cutv.size() && Cutv.at(start_iter).first == rect::CROSSPOINT::IN; ++start_iter);
+		for (; start_iter < Cutv.size() && Cutv.at(start_iter).first != rect::CROSSPOINT::IN; ++start_iter);
 	}
 
 	return ret;

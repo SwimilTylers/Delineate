@@ -1,8 +1,8 @@
-#include "MouseClickServer.h"
+#include "ButtomServer.h"
 #include "Polygon.h"
 
 
-MouseClickServer::MouseClickServer(Delegate* delegater)
+ButtomServer::ButtomServer(Delegate* delegater)
 {
 	this->delegater = delegater;
 	idle = true;
@@ -48,7 +48,7 @@ MouseClickServer::MouseClickServer(Delegate* delegater)
 }
 
 
-void MouseClickServer::getCurrent(bool isDown, int raw_x, int raw_y) {
+void ButtomServer::getCurrent(bool isDown, int raw_x, int raw_y) {
 	if (isDown) { 
 		current = std::pair<int, int>(raw_x * 2, (PAGE_HEIGHT - raw_y) * 2);
 		if (current.first < 150)	idle = false;
@@ -98,6 +98,6 @@ void MouseClickServer::getCurrent(bool isDown, int raw_x, int raw_y) {
 }
 
 
-MouseClickServer::~MouseClickServer()
+ButtomServer::~ButtomServer()
 {
 }

@@ -7,7 +7,7 @@
 using namespace std;
 
 ReactionServer server;
-static bool lock = false;
+static bool lock[] = { false,false,false };
 extern char WorkPath[_MAX_PATH];
 extern HANDLE hOut, hIn;
 extern int PAGE_HEIGHT, PAGE_WIDTH;
@@ -49,8 +49,8 @@ void PromptInteraction(int key, int x, int y) {
 		Display();
 		break;
 	case GLUT_KEY_F1:
-		clog << "F1" << endl;
-		delegater.invoked(reaction::Buttom::PAINT);
+		clog << "Get rid of paintings" << endl;
+		delegater.invoked(reaction::Buttom::DEPAINT);
 		if (delegater.ifReadyPrompt()) {
 			auto&& cmdset = delegater.sendPrompt();
 			for each (auto&& prompt in cmdset)
@@ -62,18 +62,66 @@ void PromptInteraction(int key, int x, int y) {
 		}
 		break;
 	case GLUT_KEY_F2:
-		clog << "F2" << endl;
-		if (!lock) {
-			lock = true;
-			Player.TextWords("Paint", std::pair<int, int>(2 * PAGE_WIDTH - 145, 2 * PAGE_HEIGHT - 70));
-			Display();
+		if (!lock[0]) {
+			lock[0] = true;
+			clog << "Paint color choose" << endl;
 			delegater.invoked(reaction::Buttom::PAINT);
 		}
 		else {
-			lock = false;
-			Player.TextWords("Paint", std::pair<int, int>(2 * PAGE_WIDTH - 145, 2 * PAGE_HEIGHT - 70));
-			Display();
+			lock[0] = false;
+			clog << "Paint color choose terminated" << endl;
 			delegater.invoked(reaction::Buttom::CLOSEPAINT);
+		}
+		if (delegater.ifReadyPrompt()) {
+			auto&& cmdset = delegater.sendPrompt();
+			for each (auto&& prompt in cmdset)
+			{
+				std::clog << prompt << std::endl;
+				server(prompt);
+				if (server.isReadyToExport())	Display();
+			}
+		}
+		break;
+	case GLUT_KEY_F3:
+		if (!lock[1]) {
+			lock[1] = true;
+			clog << "Get edges" << endl;
+			delegater.invoked(reaction::Buttom::OPENEDGE);
+			if (delegater.ifReadyPrompt()) {
+				auto&& cmdset = delegater.sendPrompt();
+				for each (auto&& prompt in cmdset)
+				{
+					std::clog << prompt << std::endl;
+					server(prompt);
+					if (server.isReadyToExport())	Display();
+				}
+			}
+		}
+		else {
+			lock[1] = false;
+			clog << "Get rid of edges" << endl;
+			delegater.invoked(reaction::Buttom::CLOSEEDGE);
+			if (delegater.ifReadyPrompt()) {
+				auto&& cmdset = delegater.sendPrompt();
+				for each (auto&& prompt in cmdset)
+				{
+					std::clog << prompt << std::endl;
+					server(prompt);
+					if (server.isReadyToExport())	Display();
+				}
+			}
+		}
+		break;
+	case GLUT_KEY_F4:
+		if (!lock[2]) {
+			lock[2] = true;
+			clog << "Edge color choose" << endl;
+			delegater.invoked(reaction::Buttom::EDGECOLOR);
+		}
+		else {
+			lock[2] = false;
+			clog << "Edge color choose terminated" << endl;
+			delegater.invoked(reaction::Buttom::CLOSEEDGECOLOR);
 		}
 		if (delegater.ifReadyPrompt()) {
 			auto&& cmdset = delegater.sendPrompt();

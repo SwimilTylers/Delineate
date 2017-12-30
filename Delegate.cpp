@@ -9,6 +9,8 @@ Delegate::Delegate()
 	isReadyPrompt = false;
 	isReadyPrompt_mark = false;
 	isPaint = false;
+	isDePaint = false;
+	isEdgeColor = false;
 	color.resize(3, 0);
 	routine = (SERVICE)(&Delegate::idle);
 }
@@ -24,7 +26,20 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 		shouldAwakeKeyborad = true;
 	}
 	else if (Reaction == reaction::Buttom::IDLE) {
-		if (routine == (SERVICE)(&Delegate::idle)) {
+		if (isDePaint) {
+			std::clog << "DECOLOR" << std::endl;
+			routine = (SERVICE)(&Delegate::depaint);
+		}
+		else if (isCloseEdge) {
+			std::clog << "EDGE: OFF" << std::endl;
+			routine = (SERVICE)(&Delegate::closeedge);
+		}
+		else if (isOpenEdge) {
+			std::clog << "EDGE: ON" << std::endl;
+			routine = (SERVICE)(&Delegate::openedge);
+		}
+		else if (routine == (SERVICE)(&Delegate::idle)) {
+			std::clog << "CLEAN" << std::endl;
 			prompt_set.clear();
 			prompt_set.push_back("export trash Explicit");
 			prompt_set.push_back("export trash Idle");
@@ -38,20 +53,25 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 
 			isReadyPrompt = true;
 			isReadyPrompt_mark = true;
+
 			isPaint = false;
+			isCloseEdge = false;
+			isOpenEdge = false;
+			isEdgeColor = false;
+			isDePaint = false;
 		}
 		else	routine = (SERVICE)(&Delegate::idle);
 	}
 
 	// creates:
 	else if (Reaction == reaction::Buttom::Line) {
-		//		for each (auto&& var in foci) { delete var.second; }
-		//		foci.clear();
+		for each (auto&& var in foci) { delete var.second; }
+		foci.clear();
 		routine = (SERVICE)(&Delegate::straightline);
 	}
 	else if (Reaction == reaction::Buttom::Ellipse) {
-		//		for each (auto&& var in foci) { delete var.second; }
-		//		foci.clear();
+		for each (auto&& var in foci) { delete var.second; }
+		foci.clear();
 		routine = (SERVICE)(&Delegate::ellipse);
 	}
 	else if (Reaction == reaction::Buttom::Rectangle) {
@@ -61,11 +81,36 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 		routine = (SERVICE)(&Delegate::polygon);
 	}
 
+	// rotate, move, scale
+	else if (Reaction == reaction::Buttom::ROTATE) {
+		routine = (SERVICE)(&Delegate::rotate);
+	}
+	else if (Reaction == reaction::Buttom::MOVE) {
+		routine = (SERVICE)(&Delegate::move);
+	}
+	else if (Reaction == reaction::Buttom::SCALE) {
+		routine = (SERVICE)(&Delegate::scale);
+	}
+
 	// depaint/paint
 	else if (Reaction == reaction::Buttom::PAINT)
 		isPaint = true;
-	else if (Reaction == reaction::Buttom::DEPAINT)
+	else if (Reaction == reaction::Buttom::CLOSEPAINT)
 		isPaint = false;
+	else if (Reaction == reaction::Buttom::DEPAINT)
+		isDePaint = true;
+	else if (Reaction == reaction::Buttom::EDGECOLOR)
+		isEdgeColor = true;
+	else if (Reaction == reaction::Buttom::CLOSEEDGECOLOR)
+		isEdgeColor = false;
+	else if (Reaction == reaction::Buttom::OPENEDGE) {
+		isOpenEdge = true;
+		isCloseEdge = false;
+	}
+	else if (Reaction == reaction::Buttom::CLOSEEDGE) {
+		isOpenEdge = false;
+		isCloseEdge = true;
+	}
 
 	// colors:
 	else if (Reaction == reaction::Buttom::BLACK) {
@@ -75,6 +120,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 			std::clog << "BLACK" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
 		}
+		if (isEdgeColor) {
+			std::clog << "BLACK" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
+		}
 	}
 	else if (Reaction == reaction::Buttom::WHITE) {
 		color.clear();
@@ -82,6 +131,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 		if (isPaint) {
 			std::clog << "WHITE" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
+		}
+		if (isEdgeColor) {
+			std::clog << "WHITE" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
 		}
 	}
 	else if (Reaction == reaction::Buttom::RED) {
@@ -91,6 +144,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 		if (isPaint) {
 			std::clog << "RED" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
+		}
+		if (isEdgeColor) {
+			std::clog << "RED" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
 		}
 	}
 	else if (Reaction == reaction::Buttom::YELLOW) {
@@ -102,6 +159,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 			std::clog << "YELLOW" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
 		}
+		if (isEdgeColor) {
+			std::clog << "YELLOW" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
+		}
 	}
 	else if (Reaction == reaction::Buttom::BLUE) {
 		color.clear();
@@ -111,6 +172,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 			std::clog << "BLUE" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
 		}
+		if (isEdgeColor) {
+			std::clog << "BLUE" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
+		}
 	}
 	else if (Reaction == reaction::Buttom::GREEN) {
 		color.clear();
@@ -119,6 +184,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 		if (isPaint) {
 			std::clog << "GREEN" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
+		}
+		if (isEdgeColor) {
+			std::clog << "GREEN" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
 		}
 	}
 	else if (Reaction == reaction::Buttom::PURPLE) {
@@ -130,6 +199,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 			std::clog << "PURPLE" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
 		}
+		if (isEdgeColor) {
+			std::clog << "PURPLE" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
+		}
 	}
 	else if (Reaction == reaction::Buttom::CYAN) {
 		color.clear();
@@ -140,6 +213,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 			std::clog << "CYAN" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
 		}
+		if (isEdgeColor) {
+			std::clog << "CYAN" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
+		}
 	}
 	else if (Reaction == reaction::Buttom::GREY) {
 		color.clear();
@@ -147,6 +224,10 @@ void Delegate::invoked(reaction::Buttom Reaction) {
 		if (isPaint) {
 			std::clog << "GREY" << std::endl;
 			routine = (SERVICE)(&Delegate::paint);
+		}
+		if (isEdgeColor) {
+			std::clog << "GREY" << std::endl;
+			routine = (SERVICE)(&Delegate::edgecolor);
 		}
 	}
 }
@@ -360,12 +441,13 @@ void Delegate::polygon(bool isDown, std::pair<int, int> coord) {
 
 void Delegate::paint(bool isDown, std::pair<int, int> coord) {
 	if (foci.empty() || !isDown)	return;
-	std::clog << "not empty" << std::endl;
 	if (isDown && foci[0].second->isIn(coord) && coord.first >= 150) {
 		char prompt_str[200];
 		vertices.clear();
+		/*
 		sprintf(prompt_str, "Paint(%.1f:%.1f:%.1f)", color[0], color[1], color[2]);
 		std::clog << prompt_str << std::endl;
+		*/
 		prompt_set.clear();
 		sprintf(prompt_str, "record points -v [%d,%d] @release-points", coord.first, coord.second);
 		prompt_set.push_back(prompt_str);
@@ -378,14 +460,115 @@ void Delegate::paint(bool isDown, std::pair<int, int> coord) {
 	}
 }
 
-void Delegate::depaint(bool isDown, std::pair<int, int> coord) {
-	std::clog << "DePaint" << std::endl;
+void Delegate::depaint(bool, std::pair<int, int>) {
+	prompt_set.clear();
+	prompt_set.push_back("makechange graphic -p --paint default $ immediate# release-cgs# release-points#");
+
+	isReadyPrompt = true;
+	isDePaint = false;
+}
+
+
+void Delegate::edgecolor(bool, std::pair<int, int>) {
+	char prompt_str[200];
+	vertices.clear();
+	prompt_set.clear();
+	sprintf(prompt_str, "makechange graphic -p --set-color [%.1f, %.1f, %.1f] $ immediate#", color[0], color[1], color[2]);
+	prompt_set.push_back(prompt_str);
+
+	isReadyPrompt = true;
+}
+
+void Delegate::closeedge(bool, std::pair<int, int>) {
+	isCloseEdge = false;
+
+	prompt_set.clear();
+	prompt_set.push_back("makechange graphic -p --drop-edge $ immediate#");
+	isReadyPrompt = true;
+}
+
+void Delegate::openedge(bool, std::pair<int, int>) {
+	prompt_set.clear();
+	prompt_set.push_back("makechange graphic -p --set-edge $ immediate#");
+	isReadyPrompt = true;
+
+	isOpenEdge = false;
+}
+
+
+void Delegate::move(bool isDown, std::pair<int, int> coord) {
 	if (foci.empty())	return;
-	if (isDown && foci[0].second->isIn(coord)) {
+	if (isDown && coord.first >= 150) {
+		vertices.clear();
+		vertices.push_back(coord);
+	}
+	else if (vertices.size() == 1) {
 		prompt_set.clear();
-		prompt_set.push_back("makechange graphic -p --paint default $ immediate# release-cgs# release-points#");
+		char prompt_str[640];
+		sprintf(prompt_str, "let's go -p --disp [%d,%d] $ immediate#", 
+			coord.first - vertices[0].first, coord.second - vertices[0].second);
+		prompt_set.push_back(prompt_str);
+
+		foci[0].second->move(std::pair<int,int>(coord.first - vertices[0].first, coord.second - vertices[0].second));
 
 		isReadyPrompt = true;
+		vertices.clear();
+	}
+}
+
+
+void Delegate::scale(bool isDown, std::pair<int, int> coord) {
+	if (foci.empty())	return;
+	if (isDown && coord.first >= 150) {
+		vertices.clear();
+		vertices.push_back(coord);
+	}
+	else if (vertices.size() == 1) {
+		auto&& centr = foci[0].second->centriod();
+		std::pair<int, int> a(vertices[0].first - centr.first, vertices[0].second - centr.second),
+			b(coord.first - centr.first, coord.second - centr.second);
+
+		prompt_set.clear();
+		char prompt_str[640];
+		sprintf(prompt_str, "let's go -p --scale [%lf,%lf] $ immediate# ", 
+			static_cast<double>(b.first) / a.first, static_cast<double>(b.second) / a.second);
+		prompt_set.push_back(prompt_str);
+
+		foci[0].second->scale(std::pair<double,double>(static_cast<double>(b.first) / a.first, static_cast<double>(b.second) / a.second));
+
+		isReadyPrompt = true;
+		vertices.clear();
+	}
+}
+
+
+void Delegate::rotate(bool isDown, std::pair<int, int> coord) {
+	if (foci.empty())	return;
+	if (isDown && coord.first >= 150) {
+		vertices.clear();
+		vertices.push_back(coord);
+	}
+	else if (vertices.size() == 1) {
+		auto&& centr = foci[0].second->centriod();
+		std::pair<double, double> a(vertices[0].first - centr.first, vertices[0].second - centr.second),
+			b(coord.first - centr.first, coord.second - centr.second);
+		auto len_a(sqrt(a.first*a.first + a.second*a.second)), len_b(sqrt(b.first*b.first + b.second*b.second));
+		a.first /= len_a;	a.second /= len_a;
+		b.first /= len_b;	b.second /= len_b;
+
+		double rad = acos(b.first) - acos(a.first);
+
+		//double chk((a.first*a.first + a.second*a.second) * (b.first*b.first + b.second*b.second)), cgkt(a.first*b.first + a.second*b.second);
+
+		prompt_set.clear();
+		char prompt_str[640];
+		sprintf(prompt_str, "let's go -p --rotate %lf $ immediate# ", rad);
+		prompt_set.push_back(prompt_str);
+
+		foci[0].second->rotate(rad);
+
+		isReadyPrompt = true;
+		vertices.clear();
 	}
 }
 

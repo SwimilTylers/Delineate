@@ -114,10 +114,10 @@
     <ClInclude Include="ColorPrint.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MouseClickServer.h">
+    <ClInclude Include="Delegate.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Delegate.h">
+    <ClInclude Include="ButtomServer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -203,10 +203,10 @@
     <ClCompile Include="Display.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MouseClickServer.cpp">
+    <ClCompile Include="Delegate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Delegate.cpp">
+    <ClCompile Include="ButtomServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

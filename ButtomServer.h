@@ -7,11 +7,11 @@
 extern int PAGE_HEIGHT;
 extern int PAGE_WIDTH;
 
-class MouseClickServer
+class ButtomServer
 {
 public:
-	MouseClickServer(Delegate* delegater);
-	~MouseClickServer();
+	ButtomServer(Delegate* delegater);
+	~ButtomServer();
 
 	void getCurrent(bool isDown, int raw_x, int raw_y);
 	std::vector<Graphic*>& VisualizeButtom() { return buttom; }

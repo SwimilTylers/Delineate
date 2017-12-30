@@ -61,7 +61,7 @@ public:
 		double gradient;
 		bool isOutofDate(const int cmp_y) const
 		{
-			if(cmp_y > max_y)
+			if(cmp_y >= max_y)
 				return true;
 			else
 				return false;

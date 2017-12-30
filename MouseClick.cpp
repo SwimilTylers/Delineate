@@ -5,7 +5,7 @@
 #include "Reaction.h"
 
 Delegate delegater;
-MouseClickServer clickserver(&delegater);
+ButtomServer clickserver(&delegater);
 extern char WorkPath[_MAX_PATH];
 extern HANDLE hOut, hIn;
 

@@ -508,6 +508,8 @@ bool ReactionServer::go(std::string name, std::string properties) {
 	if (name.size() != 0)
 		select_graphic(name);
 
+	if (selected.graphic.ptr == nullptr)	throw std::string("not selected");
+
 	double rad = 0;
 	auto mark = properties.find("--rotate");
 	if (mark != std::string::npos) {
@@ -594,6 +596,8 @@ bool ReactionServer::makechange_outline(std::string name, std::string properties
 	if (name.size() != 0)
 		select_outline(name);
 
+	if (selected.outline.ptr == nullptr)	throw std::string("not selected");
+
 	pencolor_t color(3, 0);
 	auto mark = properties.find("--set-color");
 	if (mark != std::string::npos) {
@@ -634,6 +638,8 @@ bool ReactionServer::makechange_outline(std::string name, std::string properties
 bool ReactionServer::makechange_graphics(std::string name, std::string properties) {
 	if (name.size() != 0)
 		select_graphic(name);
+
+	if (selected.graphic.ptr == nullptr)	throw std::string("not selected");
 
 	auto mark = properties.find("--paint");
 	if (mark != std::string::npos) {

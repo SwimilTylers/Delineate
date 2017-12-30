@@ -94,11 +94,12 @@ void GLPlayer::FillGraphic(Graphic& graphic)
 			if (!graphic.getUttermost().isIn(CGenerator.first))	continue;
 			glColor3f(CGenerator.second[0], CGenerator.second[1], CGenerator.second[2]);
 			glBegin(GL_POINTS);
-			/*
+#ifdef CG
 			auto&& buf = CGenerationKernel(CGenerator.first, graphic.getRangeY().first, 
 				graphic.getCGProfile(), WindowNow);
-				*/
+#else
 			auto&& buf = scan_paint(graphic.getCGProfile(), graphic.getRangeY().first);
+#endif
 #ifndef foreach_171214
 			for (auto& subline : buf)
 			{
@@ -295,6 +296,18 @@ vector<vector<pair<int, int>>> GLPlayer::scan_paint(vector<vector<CGeneratorBarr
 			for (int j = 0; 2 * j < CGeneratorList[i].size(); ++j) {
 				int interval = CGeneratorList[i][2 * j + 1]->get_x() - CGeneratorList[i][2 * j]->get_x();
 				ret[i].resize(interval, std::pair<int, int>(CGeneratorList[i][2 * j]->get_x(), baseY + i));
+				for (int k = 0; k < interval; ++k)
+					ret[i][k].first += k;
+			}
+		}
+		else if (CGeneratorList[i].size() > 1) {
+			for (int j = 0; j < CGeneratorList[i].size() - 1; j += 2) {
+				int interval = CGeneratorList[i][j + 1]->get_x() - CGeneratorList[i][j]->get_x();
+				if (interval == 0) {
+					--j;
+					continue;
+				}
+				ret[i].resize(interval, std::pair<int, int>(CGeneratorList[i][j]->get_x(), baseY + i));
 				for (int k = 0; k < interval; ++k)
 					ret[i][k].first += k;
 			}

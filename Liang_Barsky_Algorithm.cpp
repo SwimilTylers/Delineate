@@ -18,7 +18,8 @@ struct Liang_Barsky_Algorithm_Record
 		const auto window_right(window.getHorizontalStartAndEnd().second);
 		const auto window_down(window.getVerticalStartAndEnd().first);
 		const auto window_up(window.getVerticalStartAndEnd().second);
-		const auto LBA_start(line.get_vertices().second);
+		const auto LBA_start(line.get_vertices().first);
+		const auto LBA_end(line.get_vertices().second);
 
 		crossline = line.get_vertices();
 
@@ -60,8 +61,10 @@ struct Liang_Barsky_Algorithm_Record
 			throw nullptr;
 		}
 
-		hitpoint.first = static_cast<int>(LBA_start.first + u * line.get_deltas().first + 0.5);
-		hitpoint.second = static_cast<int>(LBA_start.second + u * line.get_deltas().second + 0.5);
+		std::pair<int, int> deltas(LBA_end.first - LBA_start.first, LBA_end.second - LBA_start.second);
+
+		hitpoint.first = static_cast<int>(LBA_start.first + u * deltas.first + 0.5);
+		hitpoint.second = static_cast<int>(LBA_start.second + u * deltas.second + 0.5);
 
 		type = cross_type;
 	}
@@ -86,7 +89,8 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Liang_Barsky_Algorithm::Line
 {
 	int p[4], q[4];
 	double u[2];	// u[0] is umax, u[1] is umin
-	const auto LBA_start(line.get_vertices().second);
+	const auto LBA_start(line.get_vertices().first);
+	const auto LBA_end(line.get_vertices().second);
 
 	const auto window_left(window.getHorizontalStartAndEnd().first);
 	const auto window_right(window.getHorizontalStartAndEnd().second);
@@ -94,17 +98,19 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Liang_Barsky_Algorithm::Line
 	const auto window_up(window.getVerticalStartAndEnd().second);
 
 	// get ps and qs
-	p[0] = -line.get_deltas().first;			q[0] = LBA_start.first - window_left;
-	p[1] = line.get_deltas().first;			q[1] = window_right - LBA_start.first;
-	p[2] = -line.get_deltas().second;		q[2] = LBA_start.second - window_down;
-	p[3] = line.get_deltas().second;		q[3] = window_up - LBA_start.second;
+	p[0] = LBA_start.first - LBA_end.first;			q[0] = LBA_start.first - window_left;
+	p[1] = LBA_end.first - LBA_start.first;			q[1] = window_right - LBA_start.first;
+	p[2] = LBA_start.second - LBA_end.second;		q[2] = LBA_start.second - window_down;
+	p[3] = LBA_end.second - LBA_start.second;		q[3] = window_up - LBA_start.second;
 
 	// check if parallel to any window side
 	if (!(p[0] && p[2] && p[1] && p[3]))
 	{
 		if (p[0] == 0) {
-			if (q[0] < 0 || q[1] < 0)
+			if (q[0] < 0 || q[1] < 0) {
+				logserver.clear();
 				throw std::string("outside the rectangle");
+			}
 
 			if (p[2] > 0) {
 				// u[0] is umax, u[1] is umin
@@ -112,7 +118,18 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Liang_Barsky_Algorithm::Line
 				u[1] = static_cast<double>(q[3]) / p[3];
 
 				u[0] = u[0] < 1 ? u[0] : 1;
-				u[1] = u[1] > 0 ? u[0] : 0;
+				u[1] = u[1] > 0 ? u[1] : 0;
+
+				if (u[0] != 1) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::DOWN, u[0], 
+						rect::CROSSPOINT::OUT));
+				}
+				if (u[1] != 0) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::UP, u[1],
+						rect::CROSSPOINT::IN));
+				}
 
 			}
 			else
@@ -122,15 +139,30 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Liang_Barsky_Algorithm::Line
 				u[1] = static_cast<double>(q[2]) / p[2];
 
 				u[0] = u[0] < 1 ? u[0] : 1;
-				u[1] = u[1] > 0 ? u[0] : 0;
+				u[1] = u[1] > 0 ? u[1] : 0;
+
+				if (u[0] != 1) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::UP, u[0],
+						rect::CROSSPOINT::OUT));
+				}
+				if (u[1] != 0) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::DOWN, u[1],
+						rect::CROSSPOINT::IN));
+				}
 			}
 
-			if (u[0] < u[1])
+			if (u[0] < u[1]) {
+				logserver.clear();
 				throw std::string("outside the rectangle");
+			}
 		}
 		else if (p[2] == 0) {
-			if (q[2] < 0 || q[3] < 0)
+			if (q[2] < 0 || q[3] < 0) {
+				logserver.clear();
 				throw std::string("outside the rectangle");
+			}
 
 			if (p[0] > 0) {
 				// u[0] is umax, u[1] is umin
@@ -138,7 +170,18 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Liang_Barsky_Algorithm::Line
 				u[1] = static_cast<double>(q[1]) / p[1];
 
 				u[0] = u[0] < 1 ? u[0] : 1;
-				u[1] = u[1] > 0 ? u[0] : 0;
+				u[1] = u[1] > 0 ? u[1] : 0;
+
+				if (u[0] != 1) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::LEFT, u[0],
+						rect::CROSSPOINT::OUT));
+				}
+				if (u[1] != 0) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::RIGHT, u[1],
+						rect::CROSSPOINT::IN));
+				}
 			}
 			else
 			{
@@ -147,11 +190,24 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Liang_Barsky_Algorithm::Line
 				u[1] = static_cast<double>(q[0]) / p[0];
 
 				u[0] = u[0] < 1 ? u[0] : 1;
-				u[1] = u[1] > 0 ? u[0] : 0;
+				u[1] = u[1] > 0 ? u[1] : 0;
+
+				if (u[0] != 1) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::RIGHT, u[0],
+						rect::CROSSPOINT::OUT));
+				}
+				if (u[1] != 0) {
+					logserver.push_back(Liang_Barsky_Algorithm_Record(
+						line, window, WINDOW_EDGE::LEFT, u[1],
+						rect::CROSSPOINT::IN));
+				}
 			}
 
-			if (u[0] < u[1])
+			if (u[0] < u[1]) {
+				logserver.clear();
 				throw std::string("outside the rectangle");
+			}
 		}
 	}
 	else
@@ -165,14 +221,77 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Liang_Barsky_Algorithm::Line
 		negative_idx[1] = p[2] < 0 ? 2 : 3;
 
 		// u[0] is umax, u[1] is umin
+		u[0] = 1;	u[1] = 0;
+		WINDOW_EDGE edge_out, edge_in;
+
+		if (static_cast<double>(q[positive_idx[0]]) / p[positive_idx[0]] < 1) {
+			u[0] = static_cast<double>(q[positive_idx[0]]) / p[positive_idx[0]];
+			if (positive_idx[0] == 0) {
+				edge_out = WINDOW_EDGE::LEFT;
+			}
+			else {
+				edge_out = WINDOW_EDGE::RIGHT;
+			}
+		}
+
+		if (static_cast<double>(q[positive_idx[1]]) / p[positive_idx[1]] < 1) {
+			if (static_cast<double>(q[positive_idx[0]]) / p[positive_idx[0]]
+				> static_cast<double>(q[positive_idx[1]]) / p[positive_idx[1]]) {
+				u[0] = static_cast<double>(q[positive_idx[1]]) / p[positive_idx[1]];
+				if (positive_idx[1] == 2) {
+					edge_out = WINDOW_EDGE::DOWN;
+				}
+				else {
+					edge_out = WINDOW_EDGE::UP;
+				}
+			}
+		}
+
+		if (static_cast<double>(q[negative_idx[0]]) / p[negative_idx[0]] > 0) {
+			u[1] = static_cast<double>(q[negative_idx[0]]) / p[negative_idx[0]];
+			if (negative_idx[0] == 0) {
+				edge_in = WINDOW_EDGE::LEFT;
+			}
+			else {
+				edge_in = WINDOW_EDGE::RIGHT;
+			}
+		}
+
+		if (static_cast<double>(q[negative_idx[1]]) / p[negative_idx[1]] > 0) {
+			if (static_cast<double>(q[negative_idx[0]]) / p[negative_idx[0]]
+				< static_cast<double>(q[negative_idx[1]]) / p[negative_idx[1]]) {
+				u[1] = static_cast<double>(q[negative_idx[1]]) / p[negative_idx[1]];
+				if (negative_idx[1] == 2) {
+					edge_in = WINDOW_EDGE::DOWN;
+				}
+				else {
+					edge_in = WINDOW_EDGE::UP;
+				}
+			}
+		}
+		/*
 		u[0] = static_cast<double>(q[positive_idx[0]]) / p[positive_idx[0]] < 1 ? static_cast<double>(q[positive_idx[0]]) / p[positive_idx[0]] : 1;
 		u[1] = static_cast<double>(q[negative_idx[0]]) / p[negative_idx[0]] < 1 ? static_cast<double>(q[negative_idx[0]]) / p[negative_idx[0]] : 1;
 
 		u[0] = static_cast<double>(q[positive_idx[1]]) / p[positive_idx[1]] < 1 ? static_cast<double>(q[positive_idx[1]]) / p[positive_idx[1]] : 1;
 		u[1] = static_cast<double>(q[negative_idx[1]]) / p[negative_idx[1]] < 1 ? static_cast<double>(q[negative_idx[1]]) / p[negative_idx[1]] : 1;
+		*/
 
-		if (u[0] < u[1])
+		if (u[0] < u[1]) {
+			logserver.clear();
 			throw std::string("outside the rectangle");
+		}
+
+		if (u[0] != 1) {
+			logserver.push_back(Liang_Barsky_Algorithm_Record(
+				line, window, edge_out, u[0],
+				rect::CROSSPOINT::OUT));
+		}
+		if (u[1] != 0) {
+			logserver.push_back(Liang_Barsky_Algorithm_Record(
+				line, window, edge_in, u[1],
+				rect::CROSSPOINT::IN));
+		}
 	}
 
 
@@ -212,13 +331,14 @@ void Liang_Barsky_Algorithm::LineCutIOMark(const PolygonRim& Cut, std::deque<std
 		catch (std::string)	{}
 		for (auto && entry : logserver)
 		{
-			iter = Cutv.insert(iter, entry.getHitpoint());
+			iter = Cutv.insert(iter + 1, entry.getHitpoint());
 			if (entry.hitwindowedge_type == WINDOW_EDGE::LEFT) { left.push_back(entry.getHitpoint()); }
 			else if (entry.hitwindowedge_type == WINDOW_EDGE::RIGHT) { right.push_back(entry.getHitpoint()); }
 			else if (entry.hitwindowedge_type == WINDOW_EDGE::UP) { up.push_back(entry.getHitpoint()); }
 			else if (entry.hitwindowedge_type == WINDOW_EDGE::DOWN) { down.push_back(entry.getHitpoint()); }
 			else throw nullptr;
 		}
+		logserver.clear();
 		++iter;
 	}
 

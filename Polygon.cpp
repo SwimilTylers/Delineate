@@ -1,10 +1,10 @@
 #include "Polygon.h"
 #include <vector>
 #include "Matrix.h"
-//#include <iostream>
+#include "RectangleWindowRim.h"
 
 #define debug_171214_polygon true
-#undef debug_171214_polygon
+//#undef debug_171214_polygon
 #define debug_polygon_171215 true
 #undef debug_polygon_171215
 
@@ -202,18 +202,30 @@ Polygon Polygons::getManipulatedNewPolygon(Polygon& old_polygon, const std::pair
 	return getNewPolygon(old_polygon.getEdgeColor(), cgenerators, vertices);
 }
 
-Polygon Polygons::getCutNewPolygon(Polygon& old_polygon, RectangleRim& cutRim)
+std::vector<Polygon> Polygons::getCutNewPolygon(Polygon& old_polygon, RectangleWindowRim& cutRim)
 {
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> initVectorPairs;
+	std::vector<Polygon> ret;
+	bool isOut = true;
 	switch (rect::RectangleRelation(cutRim, old_polygon.getUttermost()))
 	{
-	case rect::NON_INTERSECT:break;
+	case rect::NON_INTERSECT: return ret;
 	case rect::IDENTICAL:
-	case rect::IMPLICATE_SUPER:	return old_polygon;
+	case rect::IMPLICATE_SUPER:	ret.push_back(old_polygon);	return ret;
 	case rect::IMPLICATE_SUB:
 	case rect::INTERSECT:
+		break;
 	default: throw std::string("corrupted response");
 	}
-	throw nullptr;
+	auto rim = cutRim.PolygonCut(old_polygon.getProfile());
+	for (size_t i = 0; i < rim.size(); i++)
+	{
+		if (rim[i].getApexes().empty())	continue;
+		auto&& cgs = old_polygon.getCGenerators();
+		if (!cgs.empty()) {
+			cgs[0].first = rim[i].getApexes().at(0);
+		}
+		ret.push_back(Polygon(rim[i], old_polygon.getEdgeColor(), cgs));
+	}
+	return ret;
 }
 

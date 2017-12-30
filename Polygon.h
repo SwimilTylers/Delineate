@@ -3,6 +3,8 @@
 #include "PolygonRim.h"
 #include "Typedef.h"
 
+class RectangleWindowRim;
+
 class Polygon :
 	public Graphic
 {
@@ -39,6 +41,6 @@ public:
 	static Polygon getScaledNewPolygon(Polygon& old_polygen, std::pair<double, double> ratio);
 	static Polygon getRotatedNewPolygon(Polygon& old_polygon, double rad);
 	static Polygon getManipulatedNewPolygon(Polygon& old_polygon, std::pair<int, int> disp, std::pair<double, double> ratio, double rad);
-	static Polygon getCutNewPolygon(Polygon& old_polygon, RectangleRim& cutRim);
+	static std::vector<Polygon> getCutNewPolygon(Polygon& old_polygon, RectangleWindowRim& cutRim);
 };
 
